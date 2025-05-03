@@ -368,7 +368,6 @@
         </div>
     </div>
 
-
 	<!-- content -->
 	<div id="content" class="animated fadeInUp fast">
 			<center>
@@ -383,6 +382,14 @@
 		</center>
 			<div class="grid grid-gap-15 container-food">
 			<div class="card-container-1">
+			<div id="insert-hello"></div>
+				<script>
+  fetch('VersionChanges.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('insert-hello').innerHTML = data;
+    });
+</script>
 				<p class="content-title">Food Recipe</p>
 										<div class="card-food">
 							<img src="./foodbuff_files/saved_resource">
