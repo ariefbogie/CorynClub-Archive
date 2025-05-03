@@ -6,3 +6,14 @@ Things to do when update:
 --| add this code to html file, inside <head> </head>
 --| <link rel="stylesheet" href="index_files/all.min.css">
 --| copy 'webfonts' folder & all.min.css from index to html_files
+3. Add version changes update
+--| carefully find the main content, then add this code
+--| <div id="insert-hello"></div>
+				<script>
+  fetch('VersionChanges.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('insert-hello').innerHTML = data;
+    });
+</script>
+4. 
