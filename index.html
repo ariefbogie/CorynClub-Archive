@@ -376,10 +376,18 @@
 <!-- Start To Copy Homepage -->
 			<div id="index-welcome">
 				<p class="content-title">Welcome!!</p>
-				<h2>Version Changes</h2>
+				<br>
+				<!---<h2>Version Changes</h2>
         <ul>
             <li><a href="2025/Toram_Home_Mar2025.html"> <strong>- March 2025</strong> </a></li>
-        </ul>
+        </ul>	--->
+				<script>
+  fetch('hello.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('insert-hello').innerHTML = data;
+    });
+</script>
 				<br>
 				<img src="./index_files/coryn-welcome.png" alt="Cruithne &amp; Persimmon Coryn" title="Cruithne &amp; Persimmon Coryn" class="home-img">
 
