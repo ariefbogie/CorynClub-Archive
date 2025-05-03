@@ -1,0 +1,8 @@
+Things to do when update:
+1. Update the 'left side' menu
+--| copy <!-- START LEFT SIDE BAR MENU --> from inde.html
+--| paste to new html file 
+2. Update awesome font
+--| add this code to html file, inside <head> </head>
+--| <link rel="stylesheet" href="index_files/all.min.css">
+--| copy 'webfonts' folder & all.min.css from index to html_files
