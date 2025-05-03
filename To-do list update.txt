@@ -8,7 +8,8 @@ Things to do when update:
 --| copy 'webfonts' folder & all.min.css from index to html_files
 3. Add version changes update
 --| carefully find the main content, then add this code
---| <div id="insert-hello"></div>
+--| <div class="card-container-1">
+<div id="insert-hello"></div>
 				<script>
   fetch('VersionChanges.html')
     .then(res => res.text())
@@ -16,4 +17,5 @@ Things to do when update:
       document.getElementById('insert-hello').innerHTML = data;
     });
 </script>
+</div>
 4. 

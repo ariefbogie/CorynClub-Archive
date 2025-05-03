@@ -1,0 +1,168 @@
+#toggleClick{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+    	background: orange;
+	z-index: 10;
+	padding: 4px;
+	width: 64px;
+	height: 84px;
+	text-align: center;
+	color: #CB4335;
+}
+
+.canvasContainer{
+	position:relative;
+	border:1px solid black;
+}
+
+.canvasLines{
+	background:black;
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	z-index: 0;
+}
+
+.canvasUserLines{
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	z-index: 1;
+}
+
+.canvasTempLines{
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	z-index: 2;
+}
+
+.canvasCircle{
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	z-index: 3;
+}
+
+.canvasIcons{
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	z-index: 4;
+}
+
+.skillLv{
+	background: black;
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	position: absolute;
+	z-index: 3;
+}
+
+.skillName{
+	color: lightGrey;
+	font-size: 13px;
+	position: absolute;
+	z-index: 3;
+	height: 35px;
+}
+
+.skillName table{
+	height: 35px;
+	width: 100%;
+}
+
+.skillName td{
+	vertical-align:bottom;
+	text-align: center;
+}
+
+@media screen and (max-width: 800px) {
+	.skillLv{
+		font-size: 15px;
+	}
+	.skillName{
+		font-family: "Arial Narrow";
+		font-size: 11px;
+	}
+}
+@media screen and (max-width: 600px) {
+	.skillLv{
+		font-size: 12px;
+	}
+	.skillName{
+		font-size: 10px;
+	}
+}
+
+.skill-sim-container {
+	background-color: white;
+	padding: 25px;
+	border: 2px black dashed;
+	margin: 15px;
+	text-align: center;
+	min-width: 335px;
+}
+
+@media screen and (max-width: 550px){
+	.skill-sim-container {
+		margin:10px 0px;
+		padding:5px;
+		border: 1px black dashed;
+	}
+}
+
+.skill-sim-container .canvasContainer {
+	margin: 25px auto;
+}
+
+.title-container {
+	display: flex;
+	/*flex-wrap: wrap;*/
+	align-items: center;
+}
+
+.title-icon {
+	margin-right: 10px;
+}
+
+.title-name{
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+.title-reset {
+	background-color: #006990;
+	color: white;
+	padding: 7px 15px;
+	cursor: pointer;
+	border-radius: 5px;
+	border: #15276b 1px solid;
+}
+
+@media screen and (max-width: 800px) {
+	.title-icon {
+		width: 40px;
+		height: 40px;
+	}
+	
+	.title-name {
+		font-size: 1rem;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.title-icon {
+		width: 35px;
+		height: 35px;
+	}
+	.title-name {
+		font-family: "Arial Narrow";
+	}
+	.title-reset {
+		padding: 7px 7px;
+	}
+}

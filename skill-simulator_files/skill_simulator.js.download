@@ -1,0 +1,607 @@
+//developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+// ========= GLOBAL VARIABLE =========
+var gridWidth = 120;
+var gridHeight = 80;
+var iconSize = 58;
+var circleSize = 65;
+var padding = 85;
+var isRightClick = false;
+
+if(window.screen.availWidth<=1070 && window.screen.availWidth>=950){
+	gridWidth = 90;
+	gridHeight = 60;
+	iconSize = 45;
+	circleSize = 52;
+	padding = 70;
+}
+
+if(window.screen.availWidth <=800){
+	gridWidth = 90;
+	gridHeight = 60;
+	iconSize = 45;
+	circleSize = 52;
+	padding = 70;
+}
+if(window.screen.availWidth <=650){
+	gridWidth = 60;
+	gridHeight = 50;
+	iconSize = 30;
+	circleSize = 38;
+	padding = 40;
+}
+
+
+var maximumSP = -1;
+var skill = [];
+var globalSP;
+var tree = [];
+var myBuild = [];
+var is_saved = 1;
+var is_login = 0;
+
+// ========= CLASS =========
+function GlobalSP(globalSpan){
+	this.value = 0;
+	this.globalSpan = globalSpan;
+
+	this.add = function(num){
+		this.value += num;
+		if(this.value > maximumSP)
+			this.globalSpan.style.color = "red";
+		else
+			this.globalSpan.style.color = "white";
+		this.globalSpan.innerHTML = this.value;
+	}
+
+	this.remove = function(num){
+		if(this.value<num)
+			return;
+
+		this.value -= num;
+		if(this.value >= maximumSP)
+			this.globalSpan.style.color = "red";
+		else
+			this.globalSpan.style.color = "white";
+		this.globalSpan.innerHTML = this.value;
+	}
+}
+
+function Tree(name, globalSP, ctxLines, ctxUserLines, ctxTempLines, ctxCircle, ctxIcons, outerDiv){
+	this.name = name;
+	this.globalSP = globalSP;
+	this.outerDiv = outerDiv;
+	this.ctxLines = ctxLines;
+	this.ctxUserLines = ctxUserLines;
+	this.ctxTempLines = ctxTempLines;
+	this.ctxCircle = ctxCircle;
+	this.ctxIcons = ctxIcons;
+	this.ctxIcons.tree = this;
+
+		// preventing auto-select text when double click
+		this.ctxIcons.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
+
+		// left click's action
+		this.ctxIcons.addEventListener('click', function (event){
+			var rect = this.getBoundingClientRect();
+			var deltaX, deltaY, dist;
+			for(var i=0; i<this.tree.skill.length; i++){
+				deltaX = (this.tree.skill[i].image.coord_x*gridWidth + padding) - (event.clientX - rect.left);
+				deltaY = (this.tree.skill[i].image.coord_y*gridHeight + padding) - (event.clientY - rect.top);
+				dist = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+				if(dist <= iconSize/2){
+					not_saved();
+					if(isRightClick == false){
+						this.tree.skill[i].addLv(1);
+						return;
+					}
+					else{
+						this.tree.skill[i].removeLv(1);
+						return false;
+					}
+				}
+			}
+			if(isRightClick == true)	return false;
+		});
+
+		// right click's action
+		this.ctxIcons.oncontextmenu = function (event){
+			var rect = this.getBoundingClientRect();
+			var deltaX, deltaY, dist;
+			for(var i=0; i<this.tree.skill.length; i++){
+				deltaX = (this.tree.skill[i].image.coord_x*gridWidth + padding) - (event.clientX - rect.left);
+				deltaY = (this.tree.skill[i].image.coord_y*gridHeight + padding) - (event.clientY - rect.top);
+				dist = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+				if(dist <= iconSize/2){
+					not_saved();
+					this.tree.skill[i].removeLv(1);
+					return false;
+				}
+			}
+			return false;
+		};
+
+		// on hover's action
+		this.ctxIcons.addEventListener('mousemove', function(event){
+			var rect = this.getBoundingClientRect();
+			var deltaX, deltaY, dist;
+
+			for(var i=0; i<this.tree.skill.length; i++){
+				deltaX = (this.tree.skill[i].image.coord_x*gridWidth + padding) - (event.clientX - rect.left);
+				deltaY = (this.tree.skill[i].image.coord_y*gridHeight + padding) - (event.clientY - rect.top);
+				dist = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+				if(dist <= iconSize/2 && this.tree.skill[i].lv == 0){
+					var curr = i;
+					var ctx = this.tree.ctxTempLines.getContext('2d');
+					do{
+						this.tree.skill[curr].lineToParent(ctx, 3, "Orchid");
+						curr = this.tree.skill[curr].prereq;
+					}while(curr != -1 && this.tree.skill[curr].lv == 0);
+					return;
+				}
+			}
+
+			//case when outside of any skill icon
+			var ctx = this.tree.ctxTempLines.getContext('2d');
+			ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
+		});
+
+
+	this.SP = 0;
+	this.spanSP = $("#sp_"+name).get(0);
+	this.spanSPRight = $("#spRight_"+name).get(0);
+
+	this.addSP = function(num){
+		this.SP += num;
+		this.spanSP.innerHTML = this.SP;
+		this.spanSPRight.innerHTML = this.SP;
+
+		this.globalSP.add(num);
+	}
+
+	this.removeSP = function(num){
+		if(this.SP < num)
+			return;
+
+		this.SP -= num;
+		this.spanSP.innerHTML = this.SP;
+		this.spanSPRight.innerHTML = this.SP;
+
+		this.globalSP.remove(num);
+	}
+
+	this.reset = function(){
+		//console.log(this.name);
+		for(var i=0; i<this.skill.length; i++){
+			this.skill[i].removeLv(this.skill[i].lv);
+		}
+	}
+}
+
+function Skill(id, name, prereq, image, x, y, interx, intery, context, tree){
+	this.tree = tree;
+	this.id = id;
+	this.name = name;
+	this.prereq = prereq;
+	//this.imgReady = false;
+	this.image = new Image();
+	this.image.coord_x = x;
+	this.image.coord_y = y;
+	this.image.inter_x = interx;
+	this.image.inter_y = intery;
+	this.image.context = context;
+	this.image.onload = function(){
+		this.context.drawImage(this, gridWidth*this.coord_x+padding-iconSize/2, gridHeight*this.coord_y+padding-iconSize/2, iconSize, iconSize);
+	};
+	this.image.src = "skill/"+image;
+
+	this.bgOff = new Image();
+	this.bgOff.coord_x = x;
+	this.bgOff.coord_y = y;
+	this.bgOff.ready = false;
+	this.bgOff.context = this.tree.ctxCircle.getContext('2d');
+	this.bgOff.onload = function(){
+		this.context.drawImage(this, gridWidth*this.coord_x+padding-circleSize/2, gridHeight*this.coord_y+padding-circleSize/2, circleSize, circleSize);
+		this.ready = true;
+	}
+	this.bgOff.src = "skill/back-off.png";
+
+	this.bgOn = new Image();
+	this.bgOn.coord_x = x;
+	this.bgOn.coord_y = y;
+	this.bgOn.ready = false;
+	this.context = this.tree.ctxCircle.getContext('2d');
+	this.bgOn.onload = function(){
+		this.ready = true;
+	}
+	this.bgOn.src = "skill/back-on.png";
+
+	var d = document.createElement('div');
+	d.className = "skillLv";
+	d.style.left = x*gridWidth-iconSize/2+padding + "px";
+	d.style.top = y*gridHeight+iconSize/2+padding+ 5 + "px";
+	d.style.width = iconSize + "px";
+	d.innerHTML = "0";
+	this.tree.outerDiv.appendChild(d);
+	this.divLv = d;
+	this.lv = 0;
+
+	var n = document.createElement('div');
+	n.className = "skillName";
+	n.innerHTML = '<table><tr><td>'+name+'</td></tr></table>';
+	n.style.left = x*gridWidth-iconSize/2+padding-25 + "px";
+	n.style.top = y*gridHeight-iconSize/2+padding-35  + "px";
+	n.style.width = iconSize+50 + "px";
+
+	this.tree.outerDiv.appendChild(n);
+
+	this.lineToParent = function(context, lineWidth, lineColor){
+		if(this.prereq != -1){
+			context.save();
+			context.strokeStyle = lineColor;
+			context.lineWidth = lineWidth;
+
+			cur = this.image;
+			pre = this.tree.skill[this.prereq].image;
+			if(cur.inter_x == -1){
+				context.beginPath();
+				context.moveTo(cur.coord_x*gridWidth+padding, cur.coord_y*gridHeight+padding);
+				context.lineTo(((cur.coord_x+pre.coord_x)*gridWidth)/2+padding, cur.coord_y*gridHeight+padding);	//      ----
+				context.lineTo(((cur.coord_x+pre.coord_x)*gridWidth)/2+padding, pre.coord_y*gridHeight+padding);	//     |
+				context.lineTo(pre.coord_x*gridWidth+padding, pre.coord_y*gridHeight+padding);					// ----
+				context.stroke();
+				context.closePath();
+			}
+			else{
+				context.beginPath();
+				context.moveTo(cur.coord_x*gridWidth+padding, cur.coord_y*gridHeight+padding);
+				context.lineTo(cur.inter_x*gridWidth+padding, cur.inter_y*gridHeight+padding);
+				context.lineTo(pre.coord_x*gridWidth+padding, pre.coord_y*gridHeight+padding);
+				context.stroke();
+				context.closePath();
+			}
+
+			context.restore();
+		}
+	};
+
+	this.addLv = function(num){
+		//draw bg circle (ON)
+		if(this.bgOn.ready){
+			var ctx = this.tree.ctxCircle.getContext('2d');
+			ctx.drawImage(this.bgOn, gridWidth*this.bgOn.coord_x+padding-circleSize/2, gridHeight*this.bgOn.coord_y+padding-circleSize/2, circleSize, circleSize);
+		}
+
+		if(this.lv+num <= 10){
+			if(this.lv==0){
+				var ctx = this.tree.ctxUserLines.getContext('2d');
+				this.lineToParent(ctx, 3, "lightGray");
+			}
+
+			this.tree.addSP(num);
+			this.lv += num;
+			this.divLv.innerHTML = this.lv;
+
+			if(this.prereq != -1 && this.tree.skill[this.prereq].lv <5)
+				this.tree.skill[this.prereq].addLv(5-this.tree.skill[this.prereq].lv);
+		}
+	};
+
+	this.removeLv = function(num){
+		if(this.lv-num >=0){
+			this.tree.removeSP(num);
+			this.lv -= num;
+			this.divLv.innerHTML = this.lv;
+
+			//remove all children
+			if(this.lv <5){
+				var skill = this.tree.skill;
+				for(var i=0; i<skill.length; i++){
+					if(skill[i].prereq == this.id && skill[i].lv>0)
+						skill[i].removeLv(skill[i].lv);
+				}
+			}
+
+			//erase line & make circle gray
+			if(this.lv == 0){
+				var ctx = this.tree.ctxUserLines.getContext('2d');
+				ctx.globalCompositeOperation = "destination-out";
+				this.lineToParent(ctx, 5, "lightGray");
+				ctx.globalCompositeOperation = "source-over";
+
+				//draw bg circle (OFF)
+				if(this.bgOff.ready){
+					var ctx = this.tree.ctxCircle.getContext('2d');
+					ctx.drawImage(this.bgOff, gridWidth*this.bgOff.coord_x+padding-circleSize/2, gridHeight*this.bgOff.coord_y+padding-circleSize/2, circleSize, circleSize);
+		}
+			}
+		}
+	};
+}
+
+// ========= OTHER FUNCTIONS =========
+function toggleClick(){
+	if(isRightClick == true){
+		$("#btn-click-text").html("increase");
+		$("#btn-click-icon").html("<i class='fas fa-plus-square'></i>");
+		isRightClick = false;
+	}
+	else{
+		$("#btn-click-text").html("decrease");
+		$("#btn-click-icon").html("<i class='fas fa-minus-square'></i>");
+		isRightClick = true;
+	}
+}
+
+function drawTreeLine(arrSkill, context){
+	for(var i=0; i<arrSkill.length; i++)
+		arrSkill[i].lineToParent(context, 1, "lightGray");
+
+}
+
+function reset_all(){
+	if(is_saved==1){
+		for(var key in tree)
+			tree[key].reset();
+
+		$("#save_name").val("");
+		$("input[name=save_public]").val([0]);
+		$("#save_desc").val("");
+		$("#build_div").fadeOut();
+	}
+	else{
+		$.confirm({
+			title: 'Discard Change?',
+			content: 'Current build is not saved, do you want to discard changes?',
+			buttons: {
+				confirm: function () {
+					is_saved = 1;
+					for(var key in tree)
+						tree[key].reset();
+
+					$("#save_name").val("");
+					$("input[name=save_public]").val([0]);
+					$("#save_desc").val("");
+					$("#build_div").fadeOut();
+				},
+				cancel: function () {
+
+				}
+			}
+		});
+	}
+
+}
+
+function save_all(){
+	var save_arr = {};
+	for(var key in tree){
+		save_arr[key] = {};
+		for(var i=0; i<tree[key].skill.length; i++)
+			if(tree[key].skill[i].lv > 0)
+				save_arr[key][i] = tree[key].skill[i].lv
+	}
+
+	return JSON.stringify(save_arr);
+}
+
+function load_all(save_str){
+	reset_all();
+	save_arr = JSON.parse(save_str);
+	for(key in save_arr)
+		for(i in save_arr[key])
+			tree[key].skill[i].addLv(save_arr[key][i]);
+}
+
+function save_build(){
+	var mydata = {
+		'type'	: 'new',
+		'name'	: $("#save_name").val(),
+		'public': $( "input[name=save_public]:checked" ).val(),
+		'desc' 	: $("#save_desc").val(),
+		'save_str' : save_all()
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "ajax/savebuild.php",
+		data: mydata,
+		dataType: "html", // Set the data type so jQuery can parse it for you
+		success: function (data) {
+			var reply = JSON.parse(data);
+			if(reply["success"] == true){
+				$("#save_sukses").html(reply["resulttext"]);
+				showSnackbar("save_sukses");
+				$("#build_div").fadeIn();
+				$("#build_title").html($("#save_name").val());
+				$("#save_status").html('<span style="color:#33CC33">(Saved)</span>');
+				$("#share_link").val("http://coryn.club/skill_simulator.php?code="+reply["link"]);
+
+				//tambahin ke drop down list, trus di-select
+				var i = myBuild.length;
+				myBuild.push({id:reply['id'],
+							  link:'http://coryn.club/skill_simulator.php?code='+reply["link"],
+							  is_public:[mydata['public']],
+							  save_str:mydata['save_str'],
+							  name:mydata['name'],
+							  desc:mydata['desc']
+							});
+				$("#load_list").append($('<option>', {
+					value: i,
+					text: myBuild[i].name
+				}));
+				$("#load_list").val(i);
+				is_saved = 1;
+				load_build();
+			} else {
+				$("#save_gagal").html(reply["resulttext"]);
+				showSnackbar("save_gagal");
+			}
+		}, error: function (request, status, error) {
+			$("#save_gagal").html(`Error! Status code: ${status} - ${error}`);
+			showSnackbar('save_gagal');
+		}
+	});
+}
+
+function save_changes(){
+	var mydata = {
+		'type'	: 'change',
+		'name'	: $("#load_name").val(),
+		'public': $("input[name=load_public]:checked" ).val(),
+		'desc' 	: $("#load_desc").val(),
+		'save_str' : save_all(),
+		'build_id' : myBuild[$("#load_list").val()].id
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "ajax/savebuild.php",
+		data: mydata,
+		dataType: "html", // Set the data type so jQuery can parse it for you
+		success: function (data) {
+			console.log(data);
+			var reply = JSON.parse(data);
+			if(reply["success"] == true){
+				$("#save_sukses").html(reply["resulttext"]);
+				showSnackbar("save_sukses");
+				$("#build_title").html(mydata.name);
+				$("#save_status").html('<span style="color:#33CC33">(Saved)</span>');
+				$("#load_desc").val(mydata.desc);
+				$("input[name=load_public]" ).val([mydata.public]);
+
+				var idx = $("#load_list").val();
+				myBuild[idx] = {id:reply['id'],
+					  link:'http://coryn.club/skill_simulator.php?code='+reply["link"],
+					  is_public:[mydata['public']],
+					  save_str:mydata['save_str'],
+					  name:mydata['name'],
+					  desc:mydata['desc']
+				};
+
+				$("#load_list option[value='" + idx + "']").remove();
+				$("#load_list").append($('<option>', {
+									value: idx,
+									text: myBuild[idx].name
+								}));
+				$("#load_list").val(idx);
+				is_saved = 1;
+				load_build();
+			} else {
+				$("#save_gagal").html(reply["resulttext"]);
+				showSnackbar("save_gagal");
+			}
+		}, error: function (request, status, error) {
+			$("#save_gagal").html(`Error! Status code: ${status} - ${error}`);
+			showSnackbar('save_gagal');
+		}
+	});
+}
+
+function not_saved(){
+	if(is_login == 1){
+		is_saved = 0;
+		$("#save_status").html('<span style="color:#red">(Not Saved)</span>');
+	}
+}
+
+function try_delete(){
+	var idx = $("#load_list").val();
+	if(idx<0)				return;			//invalid build id
+		$.confirm({
+			title: 'Delete Build?',
+			content: 'Are you sure you want to delete <b>' + myBuild[idx].name + '</b>?',
+			buttons: {
+				confirm: function () {
+					var mydata = {
+						'build_id' : myBuild[idx].id,
+						'name'	: $("#load_name").val()
+					};
+
+					$.ajax({
+						type: "POST",
+						url: "ajax/deletebuild.php",
+						data: mydata,
+						dataType: "html", // Set the data type so jQuery can parse it for you
+						success: function (data) {
+							var reply = JSON.parse(data);
+							if(reply["success"] == true){
+								$("#save_sukses").html(reply["resulttext"]);
+								showSnackbar("save_sukses");
+								if ($("#load_id").val() == myBuild[idx].id) {
+									is_saved = 1;
+									reset_all();
+								}
+								delete myBuild[idx];
+								$("#load_list option[value='" + idx + "']").remove();
+							} else {
+								$("#save_gagal").html(reply["resulttext"]);
+								showSnackbar("save_gagal");
+							}
+						}, error: function (request, status, error) {
+							$("#save_gagal").html(`Error! Status code: ${status} - ${error}`);
+							showSnackbar('save_gagal');
+						}
+					});
+				},
+				cancel: function () {
+
+				}
+			}
+		});
+
+}
+
+function try_load(){
+	var idx = $("#load_list").val();
+	if(idx<0)				return;			//invalid build id
+	else if(is_saved==1)	load_build();	//no unsaved changes, safe to load!
+	else{									//unsaved changes exist, ask first!
+		$.confirm({
+			title: 'Discard Change?',
+			content: 'Current build is not saved, do you want to discard changes?',
+			buttons: {
+				confirm: function () {
+					is_saved = 1;
+					load_build();
+				},
+				cancel: function () {
+
+				}
+			}
+		});
+	}
+}
+
+function load_build(){
+	var idx = $("#load_list").val();
+
+	$("#load_name").val(myBuild[idx].name);
+	$("#load_id").val(myBuild[idx].id);
+	$("#load_desc").val(myBuild[idx].desc);
+	$("input[name=load_public]").val(myBuild[idx].is_public);
+	load_all(myBuild[idx].save_str);
+
+	is_saved = 1;
+	$("#build_title").html(myBuild[idx].name);
+	$("#save_status").html('<span style="color:#33CC33">(Saved)</span>');
+	$("#share_link").val(myBuild[idx].link);
+	$("#build_div").fadeIn();
+
+}
+
+/*
+function grid(context){
+	for(var i=1;i<=7;i++){
+		context.beginPath(); 		// Start the path
+		context.moveTo(0, (i+0.5)*gridHeight); 	// Set the path origin
+		context.lineTo(700, (i+0.5)*gridHeight); 	// Set the path destination
+		context.closePath(); 		// Close the path
+		context.stroke();
+	}
+}
+*/
+function showSnackbar(id) {
+    let element = $(`#${id}`);
+    element.addClass('show');
+    setTimeout(function(){ element.removeClass('show');}, 3000);
+}

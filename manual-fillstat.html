@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)https://toram-id.com/fill_stats/simulator -->
+<html lang="id"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">.swal-icon--error{border-color:#f27474;-webkit-animation:animateErrorIcon .5s;animation:animateErrorIcon .5s}.swal-icon--error__x-mark{position:relative;display:block;-webkit-animation:animateXMark .5s;animation:animateXMark .5s}.swal-icon--error__line{position:absolute;height:5px;width:47px;background-color:#f27474;display:block;top:37px;border-radius:2px}.swal-icon--error__line--left{-webkit-transform:rotate(45deg);transform:rotate(45deg);left:17px}.swal-icon--error__line--right{-webkit-transform:rotate(-45deg);transform:rotate(-45deg);right:16px}@-webkit-keyframes animateErrorIcon{0%{-webkit-transform:rotateX(100deg);transform:rotateX(100deg);opacity:0}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:1}}@keyframes animateErrorIcon{0%{-webkit-transform:rotateX(100deg);transform:rotateX(100deg);opacity:0}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:1}}@-webkit-keyframes animateXMark{0%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}50%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}80%{-webkit-transform:scale(1.15);transform:scale(1.15);margin-top:-6px}to{-webkit-transform:scale(1);transform:scale(1);margin-top:0;opacity:1}}@keyframes animateXMark{0%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}50%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}80%{-webkit-transform:scale(1.15);transform:scale(1.15);margin-top:-6px}to{-webkit-transform:scale(1);transform:scale(1);margin-top:0;opacity:1}}.swal-icon--warning{border-color:#f8bb86;-webkit-animation:pulseWarning .75s infinite alternate;animation:pulseWarning .75s infinite alternate}.swal-icon--warning__body{width:5px;height:47px;top:10px;border-radius:2px;margin-left:-2px}.swal-icon--warning__body,.swal-icon--warning__dot{position:absolute;left:50%;background-color:#f8bb86}.swal-icon--warning__dot{width:7px;height:7px;border-radius:50%;margin-left:-4px;bottom:-11px}@-webkit-keyframes pulseWarning{0%{border-color:#f8d486}to{border-color:#f8bb86}}@keyframes pulseWarning{0%{border-color:#f8d486}to{border-color:#f8bb86}}.swal-icon--success{border-color:#a5dc86}.swal-icon--success:after,.swal-icon--success:before{content:"";border-radius:50%;position:absolute;width:60px;height:120px;background:#fff;-webkit-transform:rotate(45deg);transform:rotate(45deg)}.swal-icon--success:before{border-radius:120px 0 0 120px;top:-7px;left:-33px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:60px 60px;transform-origin:60px 60px}.swal-icon--success:after{border-radius:0 120px 120px 0;top:-11px;left:30px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:0 60px;transform-origin:0 60px;-webkit-animation:rotatePlaceholder 4.25s ease-in;animation:rotatePlaceholder 4.25s ease-in}.swal-icon--success__ring{width:80px;height:80px;border:4px solid hsla(98,55%,69%,.2);border-radius:50%;box-sizing:content-box;position:absolute;left:-4px;top:-4px;z-index:2}.swal-icon--success__hide-corners{width:5px;height:90px;background-color:#fff;padding:1px;position:absolute;left:28px;top:8px;z-index:1;-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}.swal-icon--success__line{height:5px;background-color:#a5dc86;display:block;border-radius:2px;position:absolute;z-index:2}.swal-icon--success__line--tip{width:25px;left:14px;top:46px;-webkit-transform:rotate(45deg);transform:rotate(45deg);-webkit-animation:animateSuccessTip .75s;animation:animateSuccessTip .75s}.swal-icon--success__line--long{width:47px;right:8px;top:38px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-animation:animateSuccessLong .75s;animation:animateSuccessLong .75s}@-webkit-keyframes rotatePlaceholder{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}5%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}12%{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}to{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}}@keyframes rotatePlaceholder{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}5%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}12%{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}to{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}}@-webkit-keyframes animateSuccessTip{0%{width:0;left:1px;top:19px}54%{width:0;left:1px;top:19px}70%{width:50px;left:-8px;top:37px}84%{width:17px;left:21px;top:48px}to{width:25px;left:14px;top:45px}}@keyframes animateSuccessTip{0%{width:0;left:1px;top:19px}54%{width:0;left:1px;top:19px}70%{width:50px;left:-8px;top:37px}84%{width:17px;left:21px;top:48px}to{width:25px;left:14px;top:45px}}@-webkit-keyframes animateSuccessLong{0%{width:0;right:46px;top:54px}65%{width:0;right:46px;top:54px}84%{width:55px;right:0;top:35px}to{width:47px;right:8px;top:38px}}@keyframes animateSuccessLong{0%{width:0;right:46px;top:54px}65%{width:0;right:46px;top:54px}84%{width:55px;right:0;top:35px}to{width:47px;right:8px;top:38px}}.swal-icon--info{border-color:#c9dae1}.swal-icon--info:before{width:5px;height:29px;bottom:17px;border-radius:2px;margin-left:-2px}.swal-icon--info:after,.swal-icon--info:before{content:"";position:absolute;left:50%;background-color:#c9dae1}.swal-icon--info:after{width:7px;height:7px;border-radius:50%;margin-left:-3px;top:19px}.swal-icon{width:80px;height:80px;border-width:4px;border-style:solid;border-radius:50%;padding:0;position:relative;box-sizing:content-box;margin:20px auto}.swal-icon:first-child{margin-top:32px}.swal-icon--custom{width:auto;height:auto;max-width:100%;border:none;border-radius:0}.swal-icon img{max-width:100%;max-height:100%}.swal-title{color:rgba(0,0,0,.65);font-weight:600;text-transform:none;position:relative;display:block;padding:13px 16px;font-size:27px;line-height:normal;text-align:center;margin-bottom:0}.swal-title:first-child{margin-top:26px}.swal-title:not(:first-child){padding-bottom:0}.swal-title:not(:last-child){margin-bottom:13px}.swal-text{font-size:16px;position:relative;float:none;line-height:normal;vertical-align:top;text-align:left;display:inline-block;margin:0;padding:0 10px;font-weight:400;color:rgba(0,0,0,.64);max-width:calc(100% - 20px);overflow-wrap:break-word;box-sizing:border-box}.swal-text:first-child{margin-top:45px}.swal-text:last-child{margin-bottom:45px}.swal-footer{text-align:right;padding-top:13px;margin-top:13px;padding:13px 16px;border-radius:inherit;border-top-left-radius:0;border-top-right-radius:0}.swal-button-container{margin:5px;display:inline-block;position:relative}.swal-button{background-color:#7cd1f9;color:#fff;border:none;box-shadow:none;border-radius:5px;font-weight:600;font-size:14px;padding:10px 24px;margin:0;cursor:pointer}.swal-button:not([disabled]):hover{background-color:#78cbf2}.swal-button:active{background-color:#70bce0}.swal-button:focus{outline:none;box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(43,114,165,.29)}.swal-button[disabled]{opacity:.5;cursor:default}.swal-button::-moz-focus-inner{border:0}.swal-button--cancel{color:#555;background-color:#efefef}.swal-button--cancel:not([disabled]):hover{background-color:#e8e8e8}.swal-button--cancel:active{background-color:#d7d7d7}.swal-button--cancel:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(116,136,150,.29)}.swal-button--danger{background-color:#e64942}.swal-button--danger:not([disabled]):hover{background-color:#df4740}.swal-button--danger:active{background-color:#cf423b}.swal-button--danger:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(165,43,43,.29)}.swal-content{padding:0 20px;margin-top:20px;font-size:medium}.swal-content:last-child{margin-bottom:20px}.swal-content__input,.swal-content__textarea{-webkit-appearance:none;background-color:#fff;border:none;font-size:14px;display:block;box-sizing:border-box;width:100%;border:1px solid rgba(0,0,0,.14);padding:10px 13px;border-radius:2px;transition:border-color .2s}.swal-content__input:focus,.swal-content__textarea:focus{outline:none;border-color:#6db8ff}.swal-content__textarea{resize:vertical}.swal-button--loading{color:transparent}.swal-button--loading~.swal-button__loader{opacity:1}.swal-button__loader{position:absolute;height:auto;width:43px;z-index:2;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);text-align:center;pointer-events:none;opacity:0}.swal-button__loader div{display:inline-block;float:none;vertical-align:baseline;width:9px;height:9px;padding:0;border:none;margin:2px;opacity:.4;border-radius:7px;background-color:hsla(0,0%,100%,.9);transition:background .2s;-webkit-animation:swal-loading-anim 1s infinite;animation:swal-loading-anim 1s infinite}.swal-button__loader div:nth-child(3n+2){-webkit-animation-delay:.15s;animation-delay:.15s}.swal-button__loader div:nth-child(3n+3){-webkit-animation-delay:.3s;animation-delay:.3s}@-webkit-keyframes swal-loading-anim{0%{opacity:.4}20%{opacity:.4}50%{opacity:1}to{opacity:.4}}@keyframes swal-loading-anim{0%{opacity:.4}20%{opacity:.4}50%{opacity:1}to{opacity:.4}}.swal-overlay{position:fixed;top:0;bottom:0;left:0;right:0;text-align:center;font-size:0;overflow-y:auto;background-color:rgba(0,0,0,.4);z-index:10000;pointer-events:none;opacity:0;transition:opacity .3s}.swal-overlay:before{content:" ";display:inline-block;vertical-align:middle;height:100%}.swal-overlay--show-modal{opacity:1;pointer-events:auto}.swal-overlay--show-modal .swal-modal{opacity:1;pointer-events:auto;box-sizing:border-box;-webkit-animation:showSweetAlert .3s;animation:showSweetAlert .3s;will-change:transform}.swal-modal{width:478px;opacity:0;pointer-events:none;background-color:#fff;text-align:center;border-radius:5px;position:static;margin:20px auto;display:inline-block;vertical-align:middle;-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;z-index:10001;transition:opacity .2s,-webkit-transform .3s;transition:transform .3s,opacity .2s;transition:transform .3s,opacity .2s,-webkit-transform .3s}@media (max-width:500px){.swal-modal{width:calc(100% - 20px)}}@-webkit-keyframes showSweetAlert{0%{-webkit-transform:scale(1);transform:scale(1)}1%{-webkit-transform:scale(.5);transform:scale(.5)}45%{-webkit-transform:scale(1.05);transform:scale(1.05)}80%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}@keyframes showSweetAlert{0%{-webkit-transform:scale(1);transform:scale(1)}1%{-webkit-transform:scale(.5);transform:scale(.5)}45%{-webkit-transform:scale(1.05);transform:scale(1.05)}80%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}</style>
+    
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="0dFQQZdVmPRngnavIZo3oAf3vqg9pxB4i3Dpi1cf">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://toram-id.com/apple-icon-144x144.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://toram-id.com/favicon-96x96.png">
+    <link rel="shortcut icon" type="image/x-icon" href="https://toram-id.com/favicon.ico">
+    <link rel="manifest" href="https://toram-id.com/manifest.json">
+    <meta name="msapplication-TileColor" content="#0066ff">
+    <meta name="theme-color" content="#0066ff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="apple-mobile-web-app-title" content="toram-id">
+    <meta name="application-name" content="toram-id.com">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+
+    <link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="">
+    
+
+    <title>Fill Stat Simulator - RPG Toram Online Database &amp; Wiki | Toram ID INFO</title>
+
+    <!-- open graph -->
+    <meta property="og:url" content="https://toram-id.com/fill_stats/simulator">
+    <meta property="og:type" content="article">
+    <meta content="RPG Toram Online Indonesia" property="og:site_name">
+    <meta property="og:title" content="Fill Stat Simulator  - RPG Toram Online Database &amp; Wiki | Toram ID INFO">
+    <meta property="og:description" content="Toram Online Fill Stats Skill level 4 Simulator">
+    <meta property="og:image" content="https://toram-id.com/img/potum.png">
+    <meta property="fb:app_id" content="2008283499456981">
+
+    <!-- // open graph -->
+
+    
+    <meta name="twitter:image:src" content="https://toram-id.com/img/potum.png">
+    <meta name="twitter:site" content="@toramidinfo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Fill Stat Simulator">
+    <meta name="twitter:description" content="Toram Online Fill Stats Skill level 4 Simulator">
+    
+
+    <meta name="google-site-verification" content="da3qNV1VnD0nhZNfFMx3Ov_6dnyvYMlUT7OChWqSbmY">
+    <meta name="description" content="Toram Online Fill Stats Skill level 4 Simulator - RPG Toram Online Database &amp; Wiki | Toram ID INFO">
+    <meta name="keywords" content="Toram Id, RPG Toram Online, Toram Online Wiki, Toram Online Database, Drop list, Monster list, Fill Stat formula, Fill stat simulator, calculator, forum, Toram Online Indonesia, MMORPG Android and iOS game">
+
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "WebSite",
+        "url": "https://toram-id.com",
+          "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://toram-id.com/search?q={q}",
+              "query-input": "required name=q"
+           }
+    }
+    </script>
+
+    <link rel="stylesheet" href="./manual-fillstat_files/font-awesome.min.css">
+    <style type="text/css">@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/latin/400/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/vietnamese/400/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/latin-ext/400/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/cyrillic/400/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/cyrillic-ext/400/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/greek/400/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:normal;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/greek-ext/400/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/latin/400/italic.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/latin-ext/400/italic.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/vietnamese/400/italic.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/cyrillic/400/italic.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/greek/400/italic.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/cyrillic-ext/400/italic.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Source Sans Pro;font-style:italic;font-weight:400;src:url(/cf-fonts/s/source-sans-pro/5.0.11/greek-ext/400/italic.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}</style>
+    <link rel="stylesheet" href="./manual-fillstat_files/animate.min.css">
+
+    <!-- Dashboard Core -->
+    <link href="./manual-fillstat_files/app.min.css" rel="stylesheet">
+    <script src="./manual-fillstat_files/jquery.min.js.download"></script>
+    <script src="./manual-fillstat_files/core.js.download"></script>
+
+    
+    <script>
+        window.addEventListener("load", function() {
+            setTimeout(function() {
+                // This hides the address bar:
+                window.scrollTo(0, 1);
+            }, 0);
+        });
+    </script>
+
+            <!-- Google tag (gtag.js) -->
+        <script async="" src="./manual-fillstat_files/js"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+
+            gtag('config', 'G-6G67MWM7YX');
+        </script>
+
+        <script defer="" src="./manual-fillstat_files/script.js.download" data-website-id="0207e97b-1ae4-4824-9107-fafa54e792ee"></script>
+            <link rel="preload" href="./manual-fillstat_files/axios.min.js.download" as="script">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (min-width: 768px) {
+            .equal {
+                display: -webkit-box;
+
+                display: -webkit-flex;
+
+                display: -ms-flexbox;
+
+                display: flex;
+            }
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .card {
+            height: 100%
+        }
+    </style>
+
+    <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+<link id="googleidentityservice" type="text/css" media="all" href="./manual-fillstat_files/style" rel="stylesheet"><meta http-equiv="origin-trial" content="A8o5T4MyEkRZqLA9WeG2XTFdV5tsX2Prg85xyQ+RL1btVuybB1K/EQ+7JUsPK+J32oBMTnsoF9B4A+qTlL6efgQAAABweyJvcmlnaW4iOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkZlZENtQnV0dG9uTW9kZSIsImV4cGlyeSI6MTc0NDY3NTIwMCwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><style id="googleidentityservice_button_styles">.qJTHM{-webkit-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:"Roboto-Regular",arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{word-break:break-all}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-uaxL4e{-webkit-border-radius:10px;border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf,.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u>div:nth-child(1){background-color:#1a73e8!important}.P1ekSe-ZMv3u>div:nth-child(2),.P1ekSe-ZMv3u>div:nth-child(3){background-image:linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{-webkit-border-radius:4px;border-radius:4px;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s;transition:background-color .218s,border-color .218s;-webkit-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:"Google Sans",arial,sans-serif;font-size:14px;height:40px;letter-spacing:0.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:14px;height:32px;letter-spacing:0.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:11px;height:20px;letter-spacing:0.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{-webkit-border-radius:20px;border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{-webkit-border-radius:16px;border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{-webkit-border-radius:10px;border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-top-left-radius:3px;border-top-left-radius:3px;-webkit-border-bottom-left-radius:3px;border-bottom-left-radius:3px;display:-webkit-box;display:-webkit-flex;display:flex;justify-content:center;-webkit-align-items:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-radius:3px;border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-radius:18px;border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-radius:14px;border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-radius:8px;border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-flex-direction:row;flex-direction:row;justify-content:space-between;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:1;flex-grow:1;font-family:"Google Sans",arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{-webkit-transition:background-color .218s;transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:hover,.nsm7Bb-HzV7m-LgbsSe:focus{-webkit-box-shadow:none;box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.04)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{-webkit-border-radius:50%;border-radius:50%;display:-webkit-box;display:-webkit-flex;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:"Roboto";font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-top-left-radius:0;border-top-left-radius:0;-webkit-border-bottom-left-radius:0;border-bottom-left-radius:0;-webkit-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-border-bottom-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{-webkit-border-radius:18px;border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{-webkit-border-radius:4px;border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style></head>
+
+<body itemscope="" itemtype="https://schema.org/WebSite">
+                        <div id="g_id_onload" data-client_id="323254082549-tihknjf7874oc07l6sknno8qcs4k48s8.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse" data-auto_prompt="true">
+            </div>
+                <meta itemprop="url" content="https://toram-id.com">
+    <div class="page">
+        <div class="page-main">
+            <div class="header py-4">
+                <div class="container">
+                    <div class="d-flex">
+                        <a class="header-brand" href="https://toram-id.com/">
+                            <img src="./manual-fillstat_files/logo.png" class="header-brand-img animated rotateIn lazyloaded" alt="toram-id.com logo"> Toram Online
+                        </a>
+                        <div class="d-flex order-lg-2 ml-auto">
+                                                            <div class="nav-item d-md-flex dropdown">
+    <div class="btn btn-sm btn-primary" data-toggle="dropdown">
+        <i class="fe fe-log-in"></i>
+
+        Login
+    </div>
+
+    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow text-center">
+        <a href="https://toram-id.com/fill_stats/simulator#" class="dropdown-item text-center text-muted-dark">Login With</a>
+        <div class="dropdown-divider"></div>
+
+            <a href="https://toram-id.com/google-login" class="btn btn-sm btn-danger" id="login-btn-google"><i class="fe fe-award"></i> Google</a>
+
+            
+
+            <a href="https://toram-id.com/tw-login" class="btn btn-sm btn-outline-primary" id="login-btn-tw"><i class="fe fe-twitter"></i> Twitter</a>
+    </div>
+</div>
+                                                    </div>
+                        <a href="https://toram-id.com/fill_stats/simulator#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
+                            <span class="header-toggler-icon"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
+                <div class="container">
+                    <div class="row align-items-center">
+
+                        <div class="col-lg order-lg-first">
+                            <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/" class="nav-link"><i class="fe fe-home"></i> Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Perlengkapan</a>
+                                    <div class="dropdown-menu dropdown-menu-arrow">
+
+                                        <a href="https://toram-id.com/items/26" class="dropdown-item ">Pedang 1 Tangan</a>
+                                        <a href="https://toram-id.com/items/27" class="dropdown-item ">Pedang 2 Tangan</a>
+                                        <a href="https://toram-id.com/items/28" class="dropdown-item ">Tinju</a>
+                                        <a href="https://toram-id.com/items/29" class="dropdown-item ">Tombak</a>
+                                        <a href="https://toram-id.com/items/13" class="dropdown-item ">Pesawat Sihir</a>
+                                        <a href="https://toram-id.com/items/30" class="dropdown-item ">Tongkat</a>
+                                        <a href="https://toram-id.com/items/14" class="dropdown-item ">Busur</a>
+                                        <a href="https://toram-id.com/items/15" class="dropdown-item ">Bowgun</a>
+                                        <a href="https://toram-id.com/items/25" class="dropdown-item ">Katana</a>
+                                        <a href="https://toram-id.com/items/31" class="dropdown-item ">Zirah</a>
+                                        <a href="https://toram-id.com/items/33" class="dropdown-item ">Perkakas Tambahan</a>
+                                        <a href="https://toram-id.com/items/32" class="dropdown-item ">Perkakas Spesial</a>
+                                        <a href="https://toram-id.com/items/43" class="dropdown-item ">Tameng</a>
+                                        <a href="https://toram-id.com/items/44" class="dropdown-item ">Belati</a>
+                                        <a href="https://toram-id.com/items/46" class="dropdown-item ">Panah</a>
+
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-star"></i> Crysta</a>
+                                    <div class="dropdown-menu dropdown-menu-arrow">
+                                        <a href="https://toram-id.com/items/34" class="dropdown-item ">Crysta Normal</a>
+                                        <a href="https://toram-id.com/items/35" class="dropdown-item ">Crysta Senjata</a>
+                                        <a href="https://toram-id.com/items/36" class="dropdown-item ">Crysta Zirah</a>
+                                        <a href="https://toram-id.com/items/37" class="dropdown-item ">Crysta Perkakas Spesial</a>
+                                        <a href="https://toram-id.com/items/38" class="dropdown-item ">Crysta Perkakas Tambahan</a>
+                                        <a href="https://toram-id.com/items/39" class="dropdown-item ">Crysta Penguat</a>
+                                        <a href="https://toram-id.com/items/41" class="dropdown-item ">Permata</a>
+
+                                    </div>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-github"></i> Peta &amp; NPC</a>
+                                    <div class="dropdown-menu dropdown-menu-arrow">
+                                        <a href="https://toram-id.com/monster" class="dropdown-item">Peta</a>
+                                        <a href="https://toram-id.com/npc" class="dropdown-item">NPC</a>
+                                    </div>
+                                </li>
+
+
+                                <li class="nav-item dropdown">
+                                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-folder"></i>Tools</a>
+                                    <div class="dropdown-menu dropdown-menu-arrow">
+
+                                        <a href="https://toram-id.com/fill_stats/formula" class="dropdown-item">Fill Stats Formula</a>
+                                        <a href="https://toram-id.com/fill_stats/simulator" class="dropdown-item ">Fill Stats
+                                            Simulator</a>
+                                        <a href="https://toram-id.com/leveling" class="dropdown-item">Leveling Finder</a>
+                                        <a href="https://toram-id.com/exp" class="dropdown-item">Exp Calculator</a>
+                                        <a href="https://toram-id.com/mq_exp" class="dropdown-item">Main Quest (MQ) Exp Calculator</a>
+                                        <a href="https://toram-id.com/potensi/kalkulator" class="dropdown-item"> Potensi Kalkulator </a>
+                                        <a href="https://toram-id.com/refine/simulasi" class="dropdown-item">Simulasi Refine</a>
+                                        <a href="https://toram-id.com/cb" class="dropdown-item">Papan Market Calculator</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/forum" class="nav-link"><i class="fe fe-users"></i> Forum</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/quiz" class="nav-link"><i class="fe fe-award"></i> Quiz</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/skill" class="nav-link"><i class="fe fe-droplet"></i>Skill</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/gallery" class="nav-link"><i class="fe fe-image"></i> Gallery</a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/avatar" class="nav-link"><i class="fe fe-shopping-bag"></i> Avatar</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="https://toram-id.com/bgm" class="nav-link"><i class="fe fe-music"></i>Background
+                                        music</a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-list"></i> Lainnya</a>
+                                    <div class="dropdown-menu dropdown-menu-arrow">
+                                        <a href="https://toram-id.com/prestasi" class="dropdown-item">Emblem / Prestasi</a>
+                                        <a href="https://toram-id.com/cooking" class="dropdown-item">Cooking / Masakan</a>
+                                        <a href="https://toram-id.com/dye" class="dropdown-item">Dye Bulanan</a>
+                                        <a href="https://toram-id.com/appearance" class="dropdown-item">App Showcase (Appearance)</a>
+                                        <a href="https://toram-id.com/registlet" class="dropdown-item">Registlet Gem Case List</a>
+                                        <a href="https://toram-id.com/guilds" class="dropdown-item">Guild List</a>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <marquee class="">
+                    <strong>NEW!!</strong> perubahan domain toram-id.info menjadi toram-id.com.
+                </marquee>
+            </div>
+
+                <div class="my-5" onload="App.loadLanguage(); App.loadSettings(); App.loadFromStorage()">
+
+        <div class="container">
+
+            <div class="my-3 ads">
+    <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+    <!-- horizontal seele -->
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3650356173552443" data-ad-slot="2142593788" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done"><iframe id="aswift_0" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important;" src="./manual-fillstat_files/saved_resource.html"><iframe id="google_ads_frame0" src="./manual-fillstat_files/saved_resource(1).html"></iframe></iframe></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+            <div class="page-header">
+                <h1 class="page-title"> Fill Stat Simulator</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-header">
+  <form action="https://toram-id.com/search" method="GET" itemprop="potentialAction" itemscope="" itemtype="https://schema.org/SearchAction" accept-charset="utf8">
+<meta itemprop="target" content="https://toram-id.com/search?q={q}">
+<div class="page-options d-flex">
+    <div class="input-icon mr-1">
+      <span class="input-icon-addon">
+        <i class="fe fe-search"></i>
+      </span>
+      <input itemprop="query-input" type="search" name="q" class="form-control w-10" placeholder="Search here . . ." value="" pattern=".{3,}" title="3 karakter atau lebih" required="">
+    </div>
+
+      <select class="form-control custom-select w-auto" name="type">
+        <option value="name_only">Nama</option>
+        <option value="status_only">Status</option>
+    </select>
+   </div>
+  </form>
+</div>                </div>
+
+                <div class="mb-5 col-12">
+                    <div class="alert alert-info">
+                        Untuk melihat fill stats formula <a href="https://toram-id.com/fill_stats/formula">klik disini</a>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        Before using this statting simulator, ensure that you learn these statting skills (3 skills on the
+                        bottom) and level up to max level
+
+                        <img src="./manual-fillstat_files/IMG_20201206_095828.jpg" class="my-2 d-block">
+                        and <b>Max</b> your <b>TECH</b> stats to 255 point.
+
+                        <img src="./manual-fillstat_files/IMG_20201206_095907~2.jpg" class="my-2 d-block">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row equal justify-content-center">
+                <div class="mb-5 col-md-5 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"> Resep status </h3>
+                        </div>
+                        <div class="card-alert alert alert-info">
+                            <b>Updated</b> Skill tree level 4 <br>
+                            <small>updated: <i> 21 Feb 2024</i> Lv cap 280 </small>
+                        </div>
+
+                        <div class="p-3 card-body" style="font-size:14px;font-weight:400">
+                            <div class="form-group">
+                                <label class="form-label">Type</label>
+                                <div class="selectgroup w-100">
+                                    <label class="selectgroup-item">
+                                        <input onclick="document.querySelector(&#39;#recipe_pot&#39;).value = 46" type="radio" value="w" class="selectgroup-input" checked="true" name="weap_arm" id="weap_arm">
+                                        <span class="selectgroup-button selectgroup-button-icon">Weapon</span>
+                                    </label>
+
+                                    <label class="selectgroup-item">
+                                        <input onclick="document.querySelector(&#39;#recipe_pot&#39;).value = 44" type="radio" value="a" checked="false" class="selectgroup-input" name="weap_arm" id="weap_arm">
+                                        <span class="selectgroup-button selectgroup-button-icon">Armor</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Language</label>
+                                <select name="language" id="language" class="form-control">
+                                    <option value="en">English</option>
+                                    <option value="id">Bahasa Indonesia</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Recipe Pot</label>
+                                <input type="number" value="44" class="form-control" id="recipe_pot">
+                            </div>
+
+                            <div class="form-group">
+                                <details>
+                                    <summary>cs base pot</summary>
+
+                                    <pre>//----- Armor -----//
+- Adventure Grab		(15)
+  [baju Pengelana]
+
+- Forest Wolf Garb		(19)
+  [baju an**ng hutan]
+
+- Jeremiah Mail			(36)
+  [zirah Jeremiah]
+
+- Lil Empress Garb		(38)
+  [Baju Kaisar Wanita]
+
+- Heaven Feather Garb	(41)
+  [Jubah Bulu Surgawi]
+
+- Bark Mail				(44)
+  [Zirah Pepagan]
+
+//----- Weapon -----//
+
+- 5th Anniv Weapon VII	(46)
+  [All type weapon]
+
+- Vulture Shooter		(45)
+  [Busur Vulture]
+
+- Vulture Blade			(45)
+  [Pedang Vulture]</pre>
+
+                                </details>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Starting Pot</label>
+                                <input type="number" value="89" class="form-control" id="starting_pot">
+                            </div>
+
+                            <div class="form-group">
+                                <details>
+                                    <summary>extras</summary>
+                                    <label for="tec">TECH</label>
+                                    <input type="number" name="tec" id="tec" min="0" max="255" class="form-control" value="255">
+                                    <label for="proficiency">Proficiency</label>
+                                    <input type="number" name="proficiency" id="proficiency" min="0" max="250" class="form-control" value="0">
+                                </details>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="m-1 btn btn-outline-primary btn-pill" onclick="App.spawn();setTimeout(() =&gt; { document.getElementById(&#39;workspace&#39;).scrollIntoView() }, 400)">Start!</button>
+
+                                <a href="https://toram-id.com/fill_stats/formula" class="m-1 btn btn-pill btn-outline-warning"><i class="fe fe-folder"></i> Explore Formula</a>
+
+                            </div>
+
+
+                            <div class="mt-3">
+                                <small class="text-muted">Credit: <a href="https://sparkychildcharlie.github.io/statting_simulator" rel="nofollow" target="_blank">Charlie Kobayashi</a></small>
+                                <div class="my-1">
+                                    <div class="ads">
+        <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+        <!-- mobile ads~ -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3650356173552443" data-ad-slot="1872592432" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done"><iframe id="aswift_1" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important;" src="./manual-fillstat_files/saved_resource(2).html"><iframe id="google_ads_frame1" src="./manual-fillstat_files/saved_resource(3).html"></iframe></iframe></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                                    <div class="mb-5 col-md-4" id="wk">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">WorkSpace</h3>
+                            </div>
+                            <div class="p-3 card-body">
+                                <div id="stat-details"></div>
+                                <div id="navigation_bar"></div>
+                                Save your formula to server <br>
+                                <div class="form-group">
+                                    <label class="form-label">Note</label>
+                                    <input type="text" class="form-control" id="note" maxlength="40" placeholder="title max 40 charachter">
+                                </div>
+                                                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-pill" id="save" onclick="Cloud.send()">Save</button>
+
+                                                                            </div>
+                                
+                                <hr class="my-2">
+
+                                <div class="dimmer">
+                                    <div class="loader"></div>
+                                    <div class="dimmer-content">
+                                        <div id="saved-formula" class="o-auto" style="height: 400px">
+                                            Save public atau <a href="https://toram-id.com/fb-login">Login</a> untuk melihat formula yang telah
+                                            kamu simpan <br> <br>
+											Update Lv cap 300 <br>
+											- STR% etc <br>
+											- Nat HP regen <br>
+											- Nat MP regen <br>
+											- ATK% <br>
+											- MATK% <br>
+											- Physical pierce% <br>
+											- Magic pierce% <br>
+											- DEF/MDEF% <br>
+											- Accuracy <br>
+											- Accuracy% <br>
+											- Dodge <br>
+											- ASPD% <br>
+											- CSPD% <br>
+											- Critical rate <br>
+											- Critical rate% <br>
+											- Critical damage <br>
+											- Critical damage% <br>
+											- P/M resistance% <br>
+											- Ele resistance% <br>
+											- DTE% <br>
+											
+                                        </div>
+                                        <!--
+										<div id="love-formula" class="o-auto" style="height: 165px"> empty
+                                        </div>
+										-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                <div class="mb-5 col-md-3" id="ads">
+                    <div class="my-3">
+     <div class="card text-center p-2">
+          <!--<span class="text-center text-muted py-2">ADVERTISEMENT</span>-->
+
+          <div class="ads">
+            <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+            <!-- persegi seele -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3650356173552443" data-ad-slot="5733482296" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done"><iframe id="aswift_2" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important;" src="./manual-fillstat_files/saved_resource(4).html"><iframe id="google_ads_frame2" src="./manual-fillstat_files/saved_resource(5).html"></iframe></iframe></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+               </div>
+
+        <!--  <span class="text-center text-muted py-2">ADVERTISEMENT</span> -->
+
+     </div>
+</div>
+                </div>
+
+                <div class="w-100"></div>
+                <div class="mb-5 col-md-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Status</h3>
+                        </div>
+                        <div class="p-3 card-body">
+                            <div class="mt-2 d-block">
+                                <div class="ads">
+        <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+        <!-- mobile ads~ -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3650356173552443" data-ad-slot="1872592432" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done"><iframe id="aswift_3" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important;" src="./manual-fillstat_files/saved_resource(6).html"><iframe id="google_ads_frame3" src="./manual-fillstat_files/saved_resource(7).html"></iframe></iframe></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="p-3 row gutter-xs" id="workspace">
+                                    stats will appear here.
+                                </div>
+                            </div>
+
+                            <div class="mt-2 d-block">
+                                <div class="ads">
+        <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+        <!-- mobile ads~ -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3650356173552443" data-ad-slot="1872592432" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done"><iframe id="aswift_4" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important;" src="./manual-fillstat_files/saved_resource(8).html"><iframe id="google_ads_frame4" src="./manual-fillstat_files/saved_resource(9).html"></iframe></iframe></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden mb-5 col-md-7" id="show-formula">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Formula</h3>
+                            <div class="card-options"> <button class="btn btn-sm btn-outline-primary" onclick="document.getElementById(&#39;wk&#39;).scrollIntoView();document.getElementById(&#39;note&#39;).focus()">save</button>
+                            </div>
+                        </div>
+                        <div class="row p-3">
+
+                            <div class="col-md-6 card-body p-0 pb-5" id="formula_display" style="font-size:14px"></div>
+                            <div class="col-md-6 card-body p-0" id="material_display"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+
+        <div class="my-3 ads">
+    <script async="" src="./manual-fillstat_files/f.txt" crossorigin="anonymous"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-3650356173552443" data-ad-slot="6399909006" data-adsbygoogle-status="done"><iframe id="aswift_5" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important;" src="./manual-fillstat_files/saved_resource(10).html"><iframe id="google_ads_frame5" src="./manual-fillstat_files/saved_resource(11).html"></iframe></iframe></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+  <div class="col-md-6 mb-5">
+    <strong class="d-block">10 Top Contributors <span class="ml-2 text-danger animated pulse infinite">♥</span> </strong>
+    <style>
+    .collection-top-contri > .p {
+        column-count: 2; -moz-column-count: 2; -webkit-column-count: 2;
+        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
+    }
+
+    .collection-top-contri .s {
+        display: block;
+    }
+
+    </style>
+    <div class="my-1 collection-top-contri">
+      <div class="p">
+                 <div class="s">1. Hapikun (<span class="text-primary">222</span>) </div>
+                 <div class="s">2. Chera (<span class="text-primary">63</span>) </div>
+                 <div class="s">3. Yuu Otosaka (<span class="text-primary">53</span>) </div>
+                 <div class="s">4. [deleted account] (<span class="text-primary">40</span>) </div>
+                 <div class="s">5. Revanda (<span class="text-primary">30</span>) </div>
+                 <div class="s">6. Akrin XD (<span class="text-primary">25</span>) </div>
+                 <div class="s">7. Ondorus (<span class="text-primary">18</span>) </div>
+                 <div class="s">8. Ry Fen (<span class="text-primary">18</span>) </div>
+                 <div class="s">9. [deleted account] (<span class="text-primary">16</span>) </div>
+                 <div class="s">10. Yoga Art (<span class="text-primary">13</span>) </div>
+              </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-5">
+    <strong>Bagaimana cara berkontribusi?</strong>
+    <div class="d-block">
+      - kamu dapat menambahkan item dan monster yang belum ada di situs ini. <br>
+      - kamu juga dapat mengeditnya jika deskripsi atau namanya kurang tepat. <br>
+      - kamu tidak perlu login untuk bisa berkontribusi, namun kami sarankan untuk login karena jika kamu berada dalam 10 top kontributor maka kamu dapat mengakses ke situs ini tanpa iklan.
+    </div>
+
+    <div class="d-block my-1 mt-5">
+      Yuk <a href="https://toram-id.com/temp/drop/create" class="text-primary">tambah data item (drop)</a> atau <a href="https://toram-id.com/temp/monster/create" class="text-primary">tambah data monster</a>
+    </div>
+  </div>
+
+  <hr class="my-1">
+
+  <div class="col-md-6 mb-5">
+		<div class="mb-4 text-center d-flex justify-content-center">
+			<a href="https://toram-id.com/" class="mr-5 d-flex align-items-center"><i class="flag flag-id mr-2" style="width:1rem;height:0.8rem"></i>Indonesia</a> <a href="https://en.toram-id.com/" class="d-flex align-items-center"><i class="flag flag-us mr-2" style="width:1rem;height:0.8rem"></i>English</a>
+		</div>
+        <span class="text-muted">
+             <b>toram-id.com</b> is not affiliated with or endorsed by <b>Asobimo</b>. <b>toram-id.com</b> is a Database and Tools for the Toram Online game for mobile game app on iOS and Android.
+        </span>
+    </div>
+  <div class="col-md-6">
+  <h6>Sponsor &amp; Media Partner Fansite</h6>
+
+    <ul class="list-unstyled d-flex">
+      <li><a href="https://www.youtube.com/channel/UCWjnDhpItCasRJghdyXbpjQ" target="_blank">
+        <img src="./manual-fillstat_files/raymiku.png" data-src="/partner/raymiku.png" class="animated infinite bounce lazyloaded" width="150" height="80">
+        </a>
+      </li>
+      <li><a href="https://facebook.com/U28Blog" target="_blank">
+        <img src="./manual-fillstat_files/r28.png" data-src="/partner/r28.png" class="animated infinite tada lazyloaded" width="80" height="80">
+        </a>
+      </li>
+      <li><a href="https://facebook.com/groups/319940072042046" target="_blank">
+        <img src="./manual-fillstat_files/kaesa.png" data-src="/partner/kaesa.png" class="animated infinite swing lazyloaded" width="80" height="80">
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</div>
+                <div class="row align-items-center flex-row-reverse">
+                    <div class="col-auto ml-lg-auto">
+                        <div class="text-center">
+                            <a href="https://toram-id.com/developer">Developer API</a> .
+                            <a href="https://toram-id.com/kebijakan-privasi">Kebijakan privasi</a> .
+                            <a href="https://toram-id.com/rules">Rules / Peraturan</a> .
+                            <a href="https://toram-id.com/tentang-kami">Tentang Kami</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
+                        Copyright © 2018 - 2025 <a href="https://id.toram.jp/" rel="nofollow" target="_blank">Toram Online - ASOBIMO, INC</a>. Theme by <a href="https://codecalm.net/" target="_blank">codecalm.net</a> All rights reserved.
+                    </div>
+
+                    <div class="col-12 d-block col-lg-auto mt-3 mt-lg-0 text-center">
+                        <b>{ }</b> with <b class="text-danger animated pulse infinite">♥</b> in <b>Pekalongan,
+                            Indonesia</b>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+        <script src="./manual-fillstat_files/axios.min.js.download"></script>
+    <script src="./manual-fillstat_files/sweetalert.min.js.download"></script>
+    <script src="./manual-fillstat_files/saveFormula.js.download"></script>
+    <script src="./manual-fillstat_files/newfill.js.download"></script>
+    <script src="./manual-fillstat_files/math.js.download"></script>
+
+                
+    <script src="./manual-fillstat_files/lazy.js.download"></script>
+    <script src="./manual-fillstat_files/bootstrap.bundle.min.js.download"></script>
+
+    
+
+            
+            <script src="./manual-fillstat_files/client" async="" defer=""></script>
+            <script>
+                function handleCredentialResponse(response) {
+                    fetch('https://toram-id.com/google/one-tap', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                credential: response.credential
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = data.redirect_url;
+                            } else {
+                                console.error('Login failed:', data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
+            </script>
+            <script defer="" src="./manual-fillstat_files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;93a17a3b696c3e26&quot;,&quot;version&quot;:&quot;2025.4.0-1-g37f21b1&quot;,&quot;r&quot;:1,&quot;token&quot;:&quot;78ee393615fe40ed9416ffcacd097d71&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}}}" crossorigin="anonymous"></script>
+
+
+
+</body></html>

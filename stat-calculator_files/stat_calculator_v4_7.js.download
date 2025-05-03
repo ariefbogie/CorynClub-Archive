@@ -1,0 +1,2177 @@
+// ========= GLOBAL VARIABLES ========
+var MAX_STAT = 0;
+var SOURCE = new Array();
+	SOURCE["N"] = "Normal Mob";
+	SOURCE["M"] = "Mini Boss";
+	SOURCE["B"] = "Boss";
+	SOURCE["C"] = "NPC";
+	SOURCE["P"] = "Player";
+	SOURCE["20"] = "#0111E2";	//Normal = blue
+	SOURCE["21"] = "#EA0A0A";	//Weapon = red
+	SOURCE["22"] = "#05CE21";	//Armor = green
+	SOURCE["23"] = "#DCD401";	//Additional = yellow
+	SOURCE["24"] = "#D502C9";	//Special = purple
+	SOURCE["25"] = "#616161";	//Enhancer = grey
+
+var EFF_NAME = new Array();
+var OHS = new Array();
+var THS = new Array();
+var BOW = new Array();
+var BOWGUN = new Array();
+var STAFF = new Array();
+var MD = new Array();
+var KNUCKLE = new Array();
+var HALBERD = new Array();
+var KATANA = new Array();
+var ARMOR = new Array();
+var SHIELD = new Array();
+var DAGGER = new Array();
+var ARROW = new Array();
+var SCROLL = new Array();
+var ADDITIONAL = new Array();
+var SPECIAL = new Array();
+var XTAL_WEAPON = new Array();
+var XTAL_ARMOR = new Array();
+var XTAL_ADD = new Array();
+var XTAL_SPC = new Array();
+
+var arr_name = {
+		"1H Sword" : OHS,
+		"2H Sword" : THS,
+		"Bow" : BOW,
+		"Bowgun" : BOWGUN,
+		"Staff" : STAFF,
+		"Magic Device" : MD,
+		"Knuckle" : KNUCKLE,
+		"Halberd" : HALBERD,
+		"Katana"  : KATANA,
+		"Shield" : SHIELD,
+		"Dagger" : DAGGER,
+		"Arrow" : ARROW,
+		"Ninjutsu Scroll" : SCROLL,
+	};
+
+var eq_stats = new Array();
+var sub_ele = new Array();
+
+//for load/save feature
+var myBuild = [];
+var is_saved = 1;
+var is_login = 0;
+
+var skill_list = ["#sword-mastery", "#shot-mastery", "#magic-mastery", "#martial-mastery", "#halberd-mastery",
+				  "#critical-spear", "#aggravate", "#strong-chase-attack", "#martial-discipline", "#dual-sword-mastery", "#dual-sword-control",
+				  "#god-speed", "#magic-up", "#increased-energy", "#spell-burst", "#attack-up", "#intimidating-power",
+				  "#critical-up", "#defense-up", "#defense-mastery", "#dodge-up", "#accuracy-up",
+				  "#bushido", "#two-handed", "#shield-mastery", "#force-shield", "#magical-shield",
+				  "#hp-boost", "#mp-boost", "#heavy-armor", "#advanced-guard", "#light-armor","#advanced-evasion",
+				  "#quick-slash", "#hunter-bowgun", "#magic-warrior-mastery", "#sword-conversion","#magic-skin",
+		 		  "#unarmed-mastery", "#ultima-qi-charge","#hidden-talent", "#ninja-spirit", "#frontliner-ii", "#samurai-archery"];
+
+
+// ========= CLASS DECLARATION ========
+function Eqp(id, name, source, stats){
+	this.id = id;
+	this.name = name;
+	this.source = SOURCE[source];
+	if($.isNumeric(source))
+		this.isxtal = 1;
+	else
+		this.isxtal = 0;
+	this.stats = new Array();
+	for(var i=0; i<stats.length; i+=3){
+		this.stats[stats[i]] = new Object();
+		this.stats[stats[i]].value = stats[i+1];
+		this.stats[stats[i]].applied_to = stats[i+2];
+	}
+}
+
+
+// ========= INTERFACE ========
+function update_weapon(){
+	var sub = new Array();
+	sub["Bare Hand"] = ["None", "Shield", "Dagger", "Arrow", "Magic Device", "Knuckle", "Ninjutsu Scroll"];
+	sub["1H Sword"]  = ["None", "Shield", "Dagger", "Arrow", "1H Sword", "Magic Device", "Knuckle", "Ninjutsu Scroll"];
+	sub["2H Sword"] = ["None"];
+	sub["Bow"] = ["None", "Arrow", "Katana"];
+	sub["Bowgun"] = ["None", "Shield", "Dagger", "Arrow", "Magic Device", "Knuckle"];
+	sub["Staff"] = ["None", "Shield", "Dagger", "Arrow", "Magic Device", "Knuckle", "Ninjutsu Scroll"];
+	sub["Magic Device"] = ["None", "Ninjutsu Scroll"];
+	sub["Knuckle"] = ["None", "Shield", "Dagger", "Arrow", "Magic Device"];
+	sub["Halberd"] = ["None", "Dagger", "Arrow"];
+	sub["Katana"] = ["None", "Dagger", "Ninjutsu Scroll"];
+
+	//Update Main Weapon
+	$("#mainATK").val(0);
+	$("#mainATK").attr("disabled", "disabled");
+	$("#mainrefine").val("0");
+	$("#mainrefine").attr("disabled", "disabled");
+	$("#mainstability").val(0);
+	$("#mainEQ").val("-1");
+	$("#mainEQ").prop("disabled",false);
+	$("#maincrysta").val("-1");
+	$("#maincrysta2").val("-1");
+	$("#maincrysta").attr("disabled", "disabled");
+	$("#maincrysta2").attr("disabled", "disabled");
+	$("#eff_main").html("--- none ---");
+	$("#eff_mainxtal").html("");
+	$("#eff_mainxtal2").html("");
+
+	if($("#mainweapon").val() == "Bare Hand")
+		$("#mainEQ").attr("disabled", "disabled");
+	else
+		show_options($("#mainEQ"), arr_name[$("#mainweapon").val()]);
+
+	//Update Sub Weapon
+	var main = $("#mainweapon").val();
+	$("#subweapon").empty();
+	for(var i=0; i<sub[main].length; i++)
+		$("#subweapon").append($('<option>', {
+			value: sub[main][i],
+			text: sub[main][i]
+			}));
+
+	main_weapon();
+	update_subweapon();
+}
+
+function update_subweapon(){
+	$("#subATK").val(0);
+	$("#subrefine").val("0");
+	$("#substability").val(0);
+	$("#subEQ").val("-1");
+	$("#eff_sub").html("--- none ---");
+	if($("#subweapon").val()=="None")
+		$("#subEQ").attr("disabled", "disabled");
+	else{
+		$("#subEQ").prop("disabled", false);
+		show_options($("#subEQ"), arr_name[$("#subweapon").val()]);
+	}
+
+	$("#subrefine").attr("disabled", "disabled");
+	$("#subATK").attr("disabled", "disabled");
+	$("#subATKlabel").html("ATK&nbsp;");
+	if($("#subweapon").val()=="Shield")
+		$("#subATKlabel").html("DEF&nbsp;");
+}
+
+function armor_type(){
+	if($("#armortype").val()=="Without Armor"){
+		$("#eff_armor").html("--- none ---");
+		$("#eff_armorxtal").html("");
+		$("#eff_armorxtal2").html("");
+		$("#armorDEF").attr("disabled", "disabled");
+		$("#armorDEF").val(0);
+		$("#armorrefine").attr("disabled", "disabled");
+		$("#armorrefine").val("0");
+		$("#armorEQ").attr("disabled", "disabled");
+		$("#armorEQ").val("-1");
+		$("#armorcrysta").attr("disabled", "disabled");
+		$("#armorcrysta2").attr("disabled", "disabled");
+		$("#armorcrysta").val("-1");
+		$("#armorcrysta2").val("-1");
+	}
+	else{
+		$("#armorEQ").prop("disabled", false);
+	}
+
+	armor();
+}
+
+function get_restriction(x){
+	bitset = {
+		"1" : "Shield",
+		"2" : "Knuckle",
+		"4" : "Magic Device",
+		"8" : "Staff",
+		"16" : "Bowgun",
+		"32" : "Bow",
+		"64" : "2-Handed Sword",
+		"128" : "1-Handed Sword",
+		"256" : "Armor",
+		"512" : "Special Gear",
+		"1024" : "Additional Gear",
+		"2048" : "Halberd",
+		"4096" : "Event",
+		"8192" : "Katana",
+		"16384" : "Heavy Armor",
+		"32768" : "Light Armor",
+		"65536" : "Dagger",
+		"131072" : "Dual Swords",
+		"262144" : "Arrow",
+		"524288" : "Ninjutsu Scroll"
+	};
+
+	if(x==0)
+		return "";
+	else{
+		var arr = new Array();
+		for(var i=1; i<=524288; i=i<<1)
+			if(x & i)
+				arr.push(bitset[i]);
+
+		return " (" + arr.join(',') + " only)";
+	}
+}
+
+function show_effect(panel, obj){
+	var text = "";
+	if(obj.isxtal==1)
+		text += '<a href="item.php?id=' + obj.id + '"><font color="MediumBlue">' +obj.name + '</font></a><br>';
+	else
+		text += '<a href="item.php?id=' + obj.id + '"><font color="MediumBlue">' +obj.name + ' [' + obj.source + ']</font></a><br>';
+	text += '<table>';
+	obj.stats.forEach(function(eff, index){
+		if(index != 148 && index != 211){	//No need to write "Upgrade for" nor "Attack Range" effects
+			if(eff.value <0)
+				text += "<tr style='color:red'><td>" + EFF_NAME[index] + "</td><td>&nbsp;" + eff.value + get_restriction(eff.applied_to) + "</td></font></tr>";
+			else
+				text += "<tr><td>" + EFF_NAME[index] + "</td><td>&nbsp;+" + eff.value + get_restriction(eff.applied_to) + "</td></tr>";
+		}
+	});
+	text += '</table>';
+	panel.html(text);
+}
+
+function main_weapon(){
+	// Clear all player smith's stat
+	for(var i=1; i<=6; i++){
+		$("#main_s"+i).val("0");
+		$("#main_v"+i).val(0);
+		$("#main_v"+i).attr("disabled", "disabled");
+	}
+
+	var obj = null;
+	if($("#mainweapon").val() != "Bare Hand")
+		obj = arr_name[$("#mainweapon").val()][$("#mainEQ").val()];
+	if(obj == null){	//not selecting any weapon
+		$("#eff_main").html("--- none ---");
+		$("#eff_mainxtal").html("");
+		$("#eff_mainxtal2").html("");
+		$("#mainATK").val(0);
+		$("#mainATK").attr("disabled", "disabled");
+		$("#mainstability").val(0);
+		$("#mainrefine").val("0");
+		$("#mainrefine").attr("disabled", "disabled");
+		$("#maincrysta").val("-1");
+		$("#maincrysta2").val("-1");
+		$("#maincrysta").attr("disabled", "disabled");
+		$("#maincrysta2").attr("disabled", "disabled");
+		$("#main_craftstat").hide();
+		return;
+	}
+
+	if(obj.source=="Player")
+		$("#main_craftstat").show();
+	else
+		$("#main_craftstat").hide();
+
+	if(obj.stats[2] != null)
+		$("#mainATK").val(obj.stats[2].value);	//2 = Base ATK
+	else
+		$("#mainATK").val(0);
+
+	if(obj.stats[111] != null)
+		$("#mainstability").val(obj.stats[111].value);	//111 = Base Stability
+	else
+		$("#mainstability").val(0);
+
+	$("#mainATK").prop("disabled", false);
+	$("#mainrefine").prop("disabled", false);
+	$("#maincrysta").prop("disabled", false);
+	$("#maincrysta2").prop("disabled", false);
+
+	show_effect($("#eff_main"), obj);
+}
+
+
+function sub_weapon(){
+	// Clear all player smith's stat
+	$("#sub_s1").val("0");
+	$("#sub_v1").val(0);
+	$("#sub_v1").attr("disabled", "disabled");
+
+	var obj = arr_name[$("#subweapon").val()][$("#subEQ").val()];
+	if(obj == null){	//not selecting any weapon
+		$("#eff_sub").html("--- none ---");
+		$("#subATK").val(0);
+		$("#substability").val(0);
+		$("#subrefine").val("0");
+		$("#subrefine").attr("disabled", "disabled");
+		$("#subATK").attr("disabled", "disabled");
+		$("#sub_craftstat").hide();
+		return;
+	}
+
+	if(($("#subweapon").val()=="1H Sword" || $("#subweapon").val()=="Magic Device") && obj.source=="Player")
+		$("#sub_craftstat").show();
+	else
+		$("#sub_craftstat").hide();
+
+	if($("#subweapon").val()=="Shield" || $("#subweapon").val()=="1H Sword" || $("#subweapon").val()=="Magic Device")
+		$("#subrefine").prop("disabled", false);
+
+	if(($("#subweapon").val()=="Arrow" || $("#subweapon").val()=="Dagger" || $("#subweapon").val()=="1H Sword" || $("#subweapon").val()=="Magic Device"
+		|| $("#subweapon").val()=="Ninjutsu Scroll" || $("#subweapon").val()=="Katana") && obj.stats[2] != null){
+		$("#subATK").val(obj.stats[2].value);	//2 = Base ATK
+		$("#subATK").prop("disabled", false);
+	}
+	else if($("#subweapon").val()=="Shield" && obj.stats[1] != null){
+		$("#subATK").val(obj.stats[1].value);	//1 = Base DEF
+		$("#subATK").prop("disabled", false);
+	}
+	else
+		$("#subATK").val(0);
+
+	if(($("#subweapon").val()=="Arrow" || $("#subweapon").val()=="Dagger" || $("#subweapon").val()=="1H Sword" || $("#subweapon").val()=="Magic Device"
+	   	|| $("#subweapon").val()=="Katana") && obj.stats[111] != null)
+		$("#substability").val(obj.stats[111].value);	//111 = Base Stability
+	else
+		$("#substability").val(0);
+
+	show_effect($("#eff_sub"), obj);
+}
+
+function armor(){
+	// Clear all player smith's stat
+	for(var i=1; i<=6; i++){
+		$("#armor_s"+i).val("0");
+		$("#armor_v"+i).val(0);
+		$("#armor_v"+i).attr("disabled", "disabled");
+	}
+
+	var obj = ARMOR[$("#armorEQ").val()];
+	if(obj == null){	//not selecting any armor
+		$("#eff_armor").html("--- none ---");
+		$("#eff_armorxtal").html("");
+		$("#eff_armorxtal2").html("");
+		$("#armorDEF").val(0);
+		$("#armorDEF").attr("disabled", "disabled");
+		$("#armorrefine").val("0");
+		$("#armorrefine").attr("disabled", "disabled");
+		$("#armorcrysta").val("-1");
+		$("#armorcrysta2").val("-1");
+		$("#armorcrysta").attr("disabled", "disabled");
+		$("#armorcrysta2").attr("disabled", "disabled");
+		$("#armor_craftstat").hide();
+		return;
+	}
+
+	if(obj.source=="Player")
+		$("#armor_craftstat").show();
+	else
+		$("#armor_craftstat").hide();
+
+	$("#armorDEF").prop("disabled", false);
+	if(obj.stats[1] != null)
+		$("#armorDEF").val(obj.stats[1].value);	//1 = Base DEF
+	else
+		$("#armorDEF").val(0);
+	$("#armorrefine").prop("disabled", false);
+	$("#armorcrysta").prop("disabled", false);
+	$("#armorcrysta2").prop("disabled", false);
+
+	show_effect($("#eff_armor"), obj);
+}
+
+function additional(){
+	var obj = ADDITIONAL[$("#addEQ").val()];
+	if(obj == null){
+		$("#eff_add").html("--- none ---");
+		$("#eff_addxtal").html("");
+		$("#eff_addxtal2").html("");
+		$("#addDEF").val(0);
+		$("#addDEF").attr("disabled", "disabled");
+		$("#addrefine").val("0");
+		$("#addrefine").attr("disabled", "disabled");
+		$("#addcrysta").val("-1");
+		$("#addcrysta2").val("-1");
+		$("#addcrysta").attr("disabled", "disabled");
+		$("#addcrysta2").attr("disabled", "disabled");
+	}
+	else{
+		$("#addDEF").prop("disabled", false);
+		if(obj.stats[1] != null)
+			$("#addDEF").val(obj.stats[1].value);	//1 = Base DEF
+		else
+			$("#addDEF").val(0);
+		$("#addrefine").prop("disabled", false);
+		$("#addcrysta").prop("disabled", false);
+		$("#addcrysta2").prop("disabled", false);
+
+		show_effect($("#eff_add"), obj);
+	}
+}
+
+function special(){
+	var obj = SPECIAL[$("#spcEQ").val()];
+	if(obj == null){
+		$("#eff_spc").html("--- none ---");
+		$("#eff_spcxtal").html("");
+		$("#eff_spcxtal2").html("");
+		$("#spcDEF").val(0);
+		$("#spcDEF").attr("disabled", "disabled");
+		$("#spccrysta").val("-1");
+		$("#spccrysta2").val("-1");
+		$("#spccrysta").attr("disabled", "disabled");
+		$("#spccrysta2").attr("disabled", "disabled");
+	}
+	else{
+		$("#spcDEF").prop("disabled", false);
+		if(obj.stats[1] != null)
+			$("#spcDEF").val(obj.stats[1].value);	//1 = Base DEF
+		else
+			$("#spcDEF").val(0);
+		$("#spccrysta").prop("disabled", false);
+		$("#spccrysta2").prop("disabled", false);
+
+		show_effect($("#eff_spc"), obj);
+	}
+}
+
+function crysta(arr, value, panel){
+	obj = arr[value];
+	if(obj == null)
+		$(panel).html("");
+	else
+		show_effect($(panel), obj);
+}
+
+function stat(section, code){
+	var sel = $("#"+section+"_s"+code);
+	var inp = $("#"+section+"_v"+code);
+	if(sel.val()==0){
+		inp.attr("disabled", "disabled");
+		inp.val(0);
+	}
+	else
+		inp.prop("disabled", false);
+}
+
+function show_options(sel, arr){
+	var optname;
+
+	sel.empty();
+	sel.append($('<option>', {
+		value: -1,
+		text: "--- none ---"
+	}));
+
+	for(var i=0; i<arr.length; i++){
+		if(arr[i].isxtal == 1){
+			sel.append($('<option>', {
+				value: i,
+				text: arr[i].name,
+				style: "color:"+arr[i].source
+			}));
+		}
+		else{
+			if(arr[i].source !="")
+				optname = arr[i].name + ' [' + arr[i].source + ']';
+			else
+				optname = arr[i].name;
+
+			sel.append($('<option>', {
+				value: i,
+				text: optname
+			}));
+		}
+	}
+}
+
+// ========= SAVE FUNCTION ========
+function try_reset(){
+	if(is_saved==1){
+		reset();
+	}
+	else{
+		$.confirm({
+			title: 'Discard Change?',
+			content: 'Current build is not saved, do you want to discard changes?',
+			buttons: {
+				confirm: function () {
+					is_saved = 1;
+					reset();
+
+					$("#save_name").val("");
+					$("input[name=save_public]").val([0]);
+					$("#save_desc").val("");
+					$("#build_div").hide();
+				},
+				cancel: function () {
+					//do nothing
+				}
+			}
+		});
+	}
+}
+
+function reset(){
+	// BASIC STAT
+	$("#level").val(1);
+	$("#STR").val(1);
+	$("#INT").val(1);
+	$("#VIT").val(1);
+	$("#AGI").val(1);
+	$("#DEX").val(1);
+	$("#personal").val("NA");
+	update_personal_stat();
+
+	//EQUIPMENT
+	$("#mainweapon").val("Bare Hand");
+	update_weapon();
+	$("#subweapon").val("None");
+	update_subweapon();
+	$("#armortype").val("Without Armor");
+	armor_type();
+	$("#addEQ").val(-1);
+	additional();
+	$("#spcEQ").val(-1);
+	special();
+
+	//AVATAR
+	for(var i=1; i<=9; i++){
+		$("#ava_s"+i).val(0);
+		stat('ava',i);
+	}
+
+	//FOOD
+	for(var i=1; i<=5; i++){
+		$("#food_s"+i).val(0);
+		stat('food',i);
+	}
+
+	//POTION
+	for(var i=1; i<=10; i++){
+		$("#potion_s"+i).val(0);
+		stat('potion',i);
+	}
+
+	//SKILL
+	for(var i=0; i<skill_list.length; i++)
+		$(skill_list[i]).val(0);
+}
+
+function try_load(){
+	var idx = $("#load_list").val();
+	if(idx<0)				return;			//invalid build id
+	else if(is_saved==1)	load_build();	//no unsaved changes, safe to load!
+	else{									//unsaved changes exist, ask first!
+		$.confirm({
+			title: 'Discard Change?',
+			content: 'Current build is not saved, do you want to discard changes?',
+			buttons: {
+				confirm: function () {
+					$("#view_div").hide();
+					is_saved = 1;
+					load_build();
+				},
+				cancel: function () {
+
+				}
+			}
+		});
+	}
+}
+
+function find_idx(arr, id){
+	for(var i=0; i<arr.length; i++)
+		if(arr[i].id == id)
+			return i;
+
+	return -1;
+}
+
+function load_all(save_str){
+	var i, idx;
+	reset();
+	save_arr = JSON.parse(save_str);
+
+	// BASIC STAT
+	$("#personal").val(save_arr["#personal"]);
+	update_personal_stat();
+	var arr = ["#level", "#STR", "#VIT", "#INT", "#AGI", "#DEX", "#personal_val"];
+	for(i=0; i<arr.length; i++)
+		$(arr[i]).val(save_arr[arr[i]]);
+	update_point();
+
+	//EQUIPMENT
+	$("#mainweapon").val(save_arr["#mainweapon"]);
+	update_weapon();
+	if(save_arr["#mainweapon"] != "Bare Hand"){
+		$("#mainEQ").val(find_idx(arr_name[save_arr["#mainweapon"]], save_arr["#mainEQ"]));
+		main_weapon();
+	}
+
+	$("#subweapon").val(save_arr["#subweapon"]);
+	update_subweapon();
+	if(save_arr["#subweapon"] != "None"){
+		$("#subEQ").val(find_idx(arr_name[save_arr["#subweapon"]], save_arr["#subEQ"]));
+		sub_weapon();
+	}
+
+	$("#armortype").val(save_arr["#armortype"]);
+	armor_type();
+
+	arr = ["#armorEQ", ARMOR,
+		   "#addEQ", ADDITIONAL,
+		   "#spcEQ", SPECIAL];
+	for(i=0; i<arr.length; i+=2)
+		$(arr[i]).val(find_idx(arr[i+1], save_arr[arr[i]]));
+	armor();
+	additional();
+	special();
+
+	arr = ["#maincrysta", XTAL_WEAPON, '#eff_mainxtal',
+		   "#maincrysta2", XTAL_WEAPON, '#eff_mainxtal2',
+		   "#armorcrysta", XTAL_ARMOR, '#eff_armorxtal',
+		   "#armorcrysta2", XTAL_ARMOR, '#eff_armorxtal2',
+		   "#addcrysta", XTAL_ADD, '#eff_addxtal',
+		   "#addcrysta2", XTAL_ADD, '#eff_addxtal2',
+		   "#spccrysta", XTAL_SPC, '#eff_spcxtal',
+		   "#spccrysta2", XTAL_SPC, '#eff_spcxtal2'];
+	for(i=0; i<arr.length; i+=3){
+		idx = find_idx(arr[i+1], save_arr[arr[i]]);
+		$(arr[i]).val(idx);
+		crysta(arr[i+1], idx, arr[i+2]);
+	}
+
+	arr = ["#mainATK", "#mainrefine", "#subATK", "#subrefine", "#armorDEF", "#armorrefine", "#addrefine", "#spcDEF"];
+	for(i=0; i<arr.length; i++)
+		$(arr[i]).val(save_arr[arr[i]]);
+
+	for(i=1; i<=10; i++){
+		$("#main_s"+i).val(save_arr["#main_s"+i]);
+		stat('main',i);
+		$("#main_v"+i).val(save_arr["#main_v"+i]);
+
+		$("#armor_s"+i).val(save_arr["#armor_s"+i]);
+		stat('armor',i);
+		$("#armor_v"+i).val(save_arr["#armor_v"+i]);
+	}
+
+	$("#sub_s1").val(save_arr["#sub_s1"]);
+	stat('sub',1);
+	$("#sub_v1").val(save_arr["#sub_v1"]);
+	
+	for(i=1; i<=9; i++){
+		$("#ava_s"+i).val(save_arr["#ava_s"+i]);
+		stat('ava',i);
+		$("#ava_v"+i).val(save_arr["#ava_v"+i]);
+	}
+
+	for(i=1; i<=5; i++){
+		$("#food_s"+i).val(save_arr["#food_s"+i]);
+		stat('food',i);
+		$("#food_v"+i).val(save_arr["#food_v"+i]);
+	}
+
+	for(i=1; i<=10; i++){
+		$("#potion_s"+i).val(save_arr["#potion_s"+i]);
+		stat('potion',i);
+		$("#potion_v"+i).val(save_arr["#potion_v"+i]);
+	}
+
+	for(i=0; i<skill_list.length; i++)
+		if(typeof save_arr[skill_list[i]] !== 'undefined')
+			$(skill_list[i]).val(save_arr[skill_list[i]]);
+		else
+			$(skill_list[i]).val(0);
+
+	calculate();
+}
+
+function load_build(){
+	var idx = $("#load_list").val();
+
+	$("#load_name").val(myBuild[idx].name);
+	$("#load_id").val(myBuild[idx].id);
+	$("#load_desc").val(myBuild[idx].desc);
+	$("input[name=load_public]").val(myBuild[idx].is_public);
+	load_all(myBuild[idx].save_str);
+
+	is_saved = 1;
+	$("#build_title").html(myBuild[idx].name);
+	$("#save_status").html('<span style="color:#33CC33">(Saved)</span>');
+	$("#share_link").val(myBuild[idx].link);
+	$("#build_div").show();
+
+}
+
+function try_delete(){
+	var idx = $("#load_list").val();
+	if(idx<0)				return;			//invalid build id
+		$.confirm({
+			title: 'Delete Build?',
+			content: 'Are you sure you want to delete <b>' + myBuild[idx].name + '</b>?',
+			buttons: {
+				confirm: function () {
+					var mydata = {
+						'build_id' : myBuild[idx].id,
+						'name'	: $("#load_name").val()
+					};
+
+					$.ajax({
+						type: "POST",
+						url: "ajax/deletestatbuild.php",
+						data: mydata,
+						dataType: "html", // Set the data type so jQuery can parse it for you
+						success: function (data) {
+							var reply = JSON.parse(data);
+							$("#delete_result").html(reply["resulttext"]);
+							delete myBuild[idx];
+							$("#load_list option[value='" + idx + "']").remove();
+						}
+					});
+				},
+				cancel: function () {
+
+				}
+			}
+		});
+}
+
+function save_all(){
+	var to_save = ["#level", "#STR", "#VIT", "#INT", "#AGI", "#DEX", "#personal", "#personal_val",
+				   "#mainweapon", "#mainATK", "#mainrefine",
+				   "#main_s1", "#main_s2", "#main_s3", "#main_s4", "#main_s5", "#main_s6", "#main_s7", "#main_s8", "#main_s9", "#main_s10",
+				   "#main_v1", "#main_v2", "#main_v3", "#main_v4", "#main_v5", "#main_v6", "#main_v7", "#main_v8", "#main_v9", "#main_v10",
+				   "#subweapon", "#subATK", "#subrefine", "#sub_s1", "#sub_v1",
+				   "#armortype", "#armorDEF", "#armorrefine",
+				   "#armor_s1", "#armor_s2", "#armor_s3", "#armor_s4", "#armor_s5", "#armor_s6", "#armor_s7", "#armor_s8", "#armor_s9", "#armor_s10",
+				   "#armor_v1", "#armor_v2", "#armor_v3", "#armor_v4", "#armor_v5", "#armor_v6", "#armor_v7", "#armor_v8", "#armor_v9", "#armor_v10",
+				   "#addDEF", "#addrefine",
+				   "#spcDEF",
+				   "#ava_s1", "#ava_s2", "#ava_s3", "#ava_s4", "#ava_s5", "#ava_s6", "#ava_s7", "#ava_s8", "#ava_s9",
+				   "#ava_v1", "#ava_v2", "#ava_v3", "#ava_v4", "#ava_v5", "#ava_v6", "#ava_v7", "#ava_v8", "#ava_v9",
+				   "#food_s1", "#food_v1", "#food_s2", "#food_v2", "#food_s3", "#food_v3", "#food_s4", "#food_v4", "#food_s5", "#food_v5",
+				   "#potion_s1", "#potion_v1", "#potion_s2", "#potion_v2", "#potion_s3", "#potion_v3", "#potion_s4", "#potion_v4", "#potion_s5", "#potion_v5",
+				   "#potion_s6", "#potion_v6", "#potion_s7", "#potion_v7", "#potion_s8", "#potion_v8", "#potion_s9", "#potion_v9", "#potion_s10", "#potion_v10",
+				];
+
+	var get_id = ["#mainEQ", "#maincrysta", "#maincrysta2",
+				  "#subEQ",
+				  "#armorEQ","#armorcrysta", "#armorcrysta2",
+				  "#addEQ", "#addcrysta", "#addcrysta2",
+				  "#spcEQ", "#spccrysta", "#spccrysta2",];
+
+	var save_arr = {};
+	for(var i=0; i<to_save.length; i++)
+		save_arr[to_save[i]] = $(to_save[i]).val();
+	for(var i=0; i<skill_list.length; i++)
+		save_arr[skill_list[i]] = $(skill_list[i]).val();
+	for(var i=0; i<get_id.length; i++)		//set default value to -1, means no item selected
+		save_arr[get_id[i]] = -1;
+
+	//main weapon item
+	var obj = null;
+	if($("#mainweapon").val() != "Bare Hand"){
+		obj = arr_name[$("#mainweapon").val()][$("#mainEQ").val()];
+		if(obj != null)
+			save_arr["#mainEQ"] = obj.id;
+	}
+
+	//main xtal1
+	obj = XTAL_WEAPON[$("#maincrysta").val()];
+	if(obj != null)
+		save_arr["#maincrysta"] = obj.id;
+	//main xtal2
+	obj = XTAL_WEAPON[$("#maincrysta2").val()];
+	if(obj != null)
+		save_arr["#maincrysta2"] = obj.id;
+
+	//sub weapon item
+	if($("#subweapon").val() != "None"){
+		obj = arr_name[$("#subweapon").val()][$("#subEQ").val()];
+		if(obj != null)
+			save_arr["#subEQ"] = obj.id;
+	}
+
+	//armor item
+	obj = ARMOR[$("#armorEQ").val()];
+	if(obj != null)
+		save_arr["#armorEQ"] = obj.id;
+	//armor xtal1
+	obj = XTAL_ARMOR[$("#armorcrysta").val()];
+	if(obj != null)
+		save_arr["#armorcrysta"] = obj.id;
+	//armor xtal2
+	obj = XTAL_ARMOR[$("#armorcrysta2").val()];
+	if(obj != null)
+		save_arr["#armorcrysta2"] = obj.id;
+
+	//additional item
+	var obj = ADDITIONAL[$("#addEQ").val()];
+	if(obj != null)
+		save_arr["#addEQ"] = obj.id;
+	//add xtal1
+	obj = XTAL_ADD[$("#addcrysta").val()];
+	if(obj != null)
+		save_arr["#addcrysta"] = obj.id;
+	//add xtal2
+	obj = XTAL_ADD[$("#addcrysta2").val()];
+	if(obj != null)
+		save_arr["#addcrysta2"] = obj.id;
+
+	//special item
+	var obj = SPECIAL[$("#spcEQ").val()];
+	if(obj != null)
+		save_arr["#spcEQ"] = obj.id;
+	//spc xtal1
+	obj = XTAL_SPC[$("#spccrysta").val()];
+	if(obj != null)
+		save_arr["#spccrysta"] = obj.id;
+	//spc xtal2
+	obj = XTAL_SPC[$("#spccrysta2").val()];
+	if(obj != null)
+		save_arr["#spccrysta2"] = obj.id;
+
+	return JSON.stringify(save_arr);
+}
+
+function save_build(){
+	var mydata = {
+		'type'	: 'new',
+		'name'	: $("#save_name").val(),
+		'public': $( "input[name=save_public]:checked" ).val(),
+		'desc' 	: $("#save_desc").val(),
+		'save_str' : save_all()
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "ajax/savestatbuild.php",
+		data: mydata,
+		dataType: "html", // Set the data type so jQuery can parse it for you
+		success: function (data) {
+			var reply = JSON.parse(data);
+			$("#save_result").html(reply["resulttext"]);
+			if(reply["success"] == true){
+				$("#build_div").show();
+				$("#build_title").html($("#save_name").val());
+				$("#save_status").html('<span style="color:#33CC33">(Saved)</span>');
+				$("#share_link").val("http://coryn.club/stat_calculator.php?code="+reply["link"]);
+
+				//tambahin ke drop down list, trus di-select
+				var i = myBuild.length;
+				myBuild.push({id:reply['id'],
+							  link:'http://coryn.club/stat_calculator.php?code='+reply["link"],
+							  is_public:[mydata['public']],
+							  save_str:mydata['save_str'],
+							  name:mydata['name'],
+							  desc:mydata['desc']
+							});
+				$("#load_list").append($('<option>', {
+					value: i,
+					text: myBuild[i].name
+				}));
+				$("#load_list").val(i);
+				is_saved = 1;
+				load_build();
+			}
+		}
+	});
+}
+
+function save_changes(){
+	var mydata = {
+		'type'	: 'change',
+		'name'	: $("#load_name").val(),
+		'public': $("input[name=load_public]:checked" ).val(),
+		'desc' 	: $("#load_desc").val(),
+		'save_str' : save_all(),
+		'build_id' : myBuild[$("#load_list").val()].id
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "ajax/savestatbuild.php",
+		data: mydata,
+		dataType: "html", // Set the data type so jQuery can parse it for you
+		success: function (data) {
+			var reply = JSON.parse(data);
+
+			$("#load_result").html(reply["resulttext"]);
+			if(reply["success"] == true){
+				$("#build_title").html(mydata.name);
+				$("#save_status").html('<span style="color:#33CC33">(Saved)</span>');
+				$("#load_desc").val(mydata.desc);
+				$("input[name=load_public]" ).val([mydata.public]);
+
+				var idx = $("#load_list").val();
+				myBuild[idx] = {id:reply['id'],
+					  link:'http://coryn.club/stat_calculator.php?code='+reply["link"],
+					  is_public:[mydata['public']],
+					  save_str:mydata['save_str'],
+					  name:mydata['name'],
+					  desc:mydata['desc']
+				};
+
+				$("#load_list option[value='" + idx + "']").remove();
+				$("#load_list").append($('<option>', {
+									value: idx,
+									text: myBuild[idx].name
+								}));
+				$("#load_list").val(idx);
+				is_saved = 1;
+				load_build();
+			}
+		}
+	});
+}
+
+function not_saved(){
+	if(is_login == 1){
+		is_saved = 0;
+		$("#save_status").html('<span style="color:#red">(Not Saved)</span>');
+	}
+}
+
+
+// ========= CALCULATION ========
+function get_equipments(){
+	var obj = new Array();
+	var bitset = 0;
+	eq_stats = new Array();
+	for(var i=0; i<350; i++)
+		eq_stats[i] = 0;
+	sub_ele = new Array();
+	for(var i=0; i<70; i++)
+		sub_ele[i] = 0;
+
+	//generate bitset;
+	if($("#subweapon").val() == "Ninjutsu Scroll")	bitset |= 524288;
+	if($("#subweapon").val() == "Arrow")		bitset |= 262144;
+	if($("#subweapon").val() == "1H Sword")		bitset |= 131072;
+	if($("#subweapon").val() == "Dagger")		bitset |= 65536;
+	if($("#armortype").val() == "Light Armor") 	bitset |= 32768;
+	if($("#armortype").val() == "Heavy Armor") 	bitset |= 16384;
+	if($("#subweapon").val() == "Katana")		bitset |= 8192;
+	if($("#mainweapon").val() == "Katana")		bitset |= 8192;
+												//4096 = event only stat
+	if($("#mainweapon").val() == "Halberd")		bitset |= 2048;
+	if($("#addEQ").val() != -1)			bitset |= 1024;
+	if($("#spcEQ").val() != -1)			bitset |= 512;
+	if($("#armortype").val() != "Without Armor") 	bitset |= 256;
+	if($("#mainweapon").val() == "1H Sword")	bitset |= 128;
+	if($("#mainweapon").val() == "2H Sword")	bitset |= 64;
+	if($("#mainweapon").val() == "Bow")		bitset |= 32;
+	if($("#mainweapon").val() == "Bowgun")		bitset |= 16;
+	if($("#mainweapon").val() == "Staff")		bitset |= 8;
+	if($("#subweapon").val() == "Magic Device")	bitset |= 4;
+	if($("#mainweapon").val() == "Magic Device") 	bitset |= 4;
+	if($("#subweapon").val() == "Knuckle")		bitset |= 2;
+	if($("#mainweapon").val() == "Knuckle")		bitset |= 2;
+	if($("#subweapon").val() == "Shield")		bitset |= 1;
+
+	//equipments
+	if($("#mainweapon").val() != "Bare Hand" && $("#mainEQ").val() != -1)
+		obj.push(arr_name[$("#mainweapon").val()][$("#mainEQ").val()]);
+	if(($("#subweapon").val() == "Dagger" || $("#subweapon").val() == "Shield" || $("#subweapon").val() == "Ninjutsu Scroll") && $("#subEQ").val() != -1)
+		obj.push(arr_name[$("#subweapon").val()][$("#subEQ").val()]);
+	if($("#maincrysta").val() != 0)		obj.push(XTAL_WEAPON[$("#maincrysta").val()]);
+	if($("#maincrysta2").val() != 0)	obj.push(XTAL_WEAPON[$("#maincrysta2").val()]);
+	if($("#armorEQ").val() != 0)		obj.push(ARMOR[$("#armorEQ").val()]);
+	if($("#armorcrysta").val() != 0)	obj.push(XTAL_ARMOR[$("#armorcrysta").val()]);
+	if($("#armorcrysta2").val() != 0)	obj.push(XTAL_ARMOR[$("#armorcrysta2").val()]);
+	if($("#addEQ").val() != 0)			obj.push(ADDITIONAL[$("#addEQ").val()]);
+	if($("#addcrysta").val() != 0)		obj.push(XTAL_ADD[$("#addcrysta").val()]);
+	if($("#addcrysta2").val() != 0)		obj.push(XTAL_ADD[$("#addcrysta2").val()]);
+	if($("#spcEQ").val() != 0)			obj.push(SPECIAL[$("#spcEQ").val()]);
+	if($("#spccrysta").val() != 0)		obj.push(XTAL_SPC[$("#spccrysta").val()]);
+	if($("#spccrysta2").val() != 0)		obj.push(XTAL_SPC[$("#spccrysta2").val()]);
+
+	var element = 0;
+	var subelement = 0;
+	for(var i=0; i<obj.length; i++){
+		if(obj[i] != null){
+			obj[i].stats.forEach(function(eff, index){
+					if(eff.applied_to == 0 || (eff.applied_to & bitset)){
+						if(index>=62 && index<=67)
+							element = index;
+						eq_stats[index] += eff.value;
+					}
+				});
+		}
+	}
+
+	//Player Crafter Equipment Stat
+	for(var i=1; i<=10; i++){
+		if($('#main_s'+i).val() != 0)
+			eq_stats[$('#main_s'+i).val()] += parseInt($('#main_v'+i).val());
+		if($('#armor_s'+i).val() != 0)
+			eq_stats[$('#armor_s'+i).val()] += parseInt($('#armor_v'+i).val());
+	}
+	if($('#sub_s1').val() != 0) sub_ele[$('#sub_s1').val()] += parseInt($('#sub_v1').val());
+
+	//Avatar Stat
+	for(var i=1; i<=9; i++){
+		if($('#ava_s'+i).val() != 0)
+			eq_stats[$('#ava_s'+i).val()] += parseInt($('#ava_v'+i).val());
+	}
+
+	//Food Stat
+	for(var i=1; i<=5; i++){
+		if($('#food_s'+i).val() != 0)
+			eq_stats[$('#food_s'+i).val()] += parseInt($('#food_v'+i).val());
+	}
+
+	//Potion Stat
+	for(var i=1; i<=10; i++){
+		if($('#potion_s'+i).val() != 0)
+			eq_stats[$('#potion_s'+i).val()] += parseInt($('#potion_v'+i).val());
+	}
+
+	//Special case, when sub is arrow. If main is Bow/Bowgun, element applies, otherwise just stats
+	if($("#subweapon").val() == "Arrow" && $("#subEQ").val() != -1){
+		var arrow = arr_name[$("#subweapon").val()][$("#subEQ").val()];
+		//var arrowelement = 0;
+		arrow.stats.forEach(function(eff, index){
+			if(eff.applied_to == 0 || (eff.applied_to & bitset)){
+				if(index>=62 && index<=67)
+					subelement = index;
+				else
+					eq_stats[index] += eff.value;
+			}
+		});
+		sub_ele[subelement] = 1;
+		if($("#mainweapon").val() == "Bow" || $("#mainweapon").val() == "Bowgun"){
+			if(element != 0 && subelement != 0){		//prioritize arrow's element
+				eq_stats[element] = 0;
+				eq_stats[subelement] = 1;
+			}
+			else if (element == 0 && subelement != 0){	//weapon don't have element
+				eq_stats[subelement] = 1;
+			}
+		}
+	}
+
+	//Special case 2, when sub is 1hs or MD. Save the sub element for damage calculation, and only for damage calculation
+	else if(($("#subweapon").val()=="1H Sword" || $("#subweapon").val()=="Magic Device") && $("#subEQ").val() != -1){
+		var subhand = arr_name[$("#subweapon").val()][$("#subEQ").val()];
+		subhand.stats.forEach(function(eff, index){
+			if(eff.applied_to == 0 || (eff.applied_to & bitset)){
+				if(index>=62 && index<=67) subelement = index;
+			}
+		});
+		sub_ele[subelement] = 1;
+	}
+
+	//============ START OF DEBUG ============
+	if(0){
+		var text = "";
+		eq_stats.forEach(function(amount, index){
+			if(amount != 0)
+				text += EFF_NAME[index] + " " + amount + '<br>';
+			});
+		
+		$("#eq_effects").html(text);
+	}
+	//============ END OF DEBUG ============
+}
+
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
+function calculate(){
+	not_saved();
+	get_equipments();
+
+	//------- PASSIVE SKILL -------
+	var skill = new Array();
+	skill["Sword Mastery"] = parseInt($("#sword-mastery").val());
+	skill["Shot Mastery"] = parseInt($("#shot-mastery").val());
+	skill["Magic Mastery"] = parseInt($("#magic-mastery").val());
+	skill["Martial Mastery"] = parseInt($("#martial-mastery").val());
+	skill["Halberd Mastery"] = parseInt($("#halberd-mastery").val());
+	skill["Critical Spear"] = parseInt($("#critical-spear").val());
+	skill["Aggravate"] = parseInt($("#aggravate").val());
+	skill["Strong Chase Attack"] = parseInt($("#strong-chase-attack").val());
+	skill["Martial Discipline"] = parseInt($("#martial-discipline").val());
+	skill["Dual Sword Mastery"] = parseInt($("#dual-sword-mastery").val());
+	skill["Dual Sword Control"] = parseInt($("#dual-sword-control").val());
+	skill["Bushido"] = parseInt($("#bushido").val());
+	skill["Two Handed"] = parseInt($("#two-handed").val());
+	skill["Quick Slash"] = parseInt($("#quick-slash").val());
+	skill["God Speed"] = parseInt($("#god-speed").val());
+	skill["Shield Mastery"] = parseInt($("#shield-mastery").val());
+	skill["Force Shield"] = parseInt($("#force-shield").val());
+	skill["Magical Shield"] = parseInt($("#magical-shield").val());
+	skill["Magic Up"] = parseInt($("#magic-up").val());
+	skill["Increased Energy"] = parseInt($("#increased-energy").val());
+	skill["Spell Burst"] = parseInt($("#spell-burst").val());
+	skill["Attack Up"] = parseInt($("#attack-up").val());
+	skill["Intimidating Power"] = parseInt($("#intimidating-power").val());
+	skill["Critical Up"] = parseInt($("#critical-up").val());
+	skill["Defense Up"] = parseInt($("#defense-up").val());
+	skill["Defense Mastery"] = parseInt($("#defense-mastery").val());
+	skill["Dodge Up"] = parseInt($("#dodge-up").val());
+	skill["Accuracy Up"] = parseInt($("#accuracy-up").val());
+	skill["HP Boost"] = parseInt($("#hp-boost").val());
+	skill["MP Boost"] = parseInt($("#mp-boost").val());
+	skill["Heavy Armor"] = parseInt($("#heavy-armor").val());
+	skill["Light Armor"] = parseInt($("#light-armor").val());
+	skill["Advanced Guard"] = parseInt($("#advanced-guard").val());
+	skill["Advanced Evasion"] = parseInt($("#advanced-evasion").val());
+	skill["Hunter Bowgun"] = parseInt($("#hunter-bowgun").val());
+	skill["Magic Warrior Mastery"] = parseInt($("#magic-warrior-mastery").val());
+	skill["Sword Conversion"] = parseInt($("#sword-conversion").val());
+	skill["Magic Skin"] = parseInt($("#magic-skin").val());
+	skill["Unarmed Mastery"] = parseInt($("#unarmed-mastery").val());
+	skill["Ultima Qi Charge"] = parseInt($("#ultima-qi-charge").val());
+	skill["Hidden Talent"] = parseInt($("#hidden-talent").val());
+	skill["Ninja Spirit"] = parseInt($("#ninja-spirit").val());
+	skill["Frontliner II"] = parseInt($("#frontliner-ii").val());
+	skill["Samurai Archery"] = parseInt($("#samurai-archery").val());
+
+	//------- STAT BONUSES FROM SKILL -------
+	eq_stats[9] += skill["God Speed"];
+	if(skill["God Speed"] >=6)	eq_stats[9] += skill["God Speed"]-5;	//9 = AGI
+
+	//------- BASIC STAT -------
+	var Lv = parseInt($("#level").val());
+	var baseSTR = parseInt($("#STR").val());
+	var baseINT = parseInt($("#INT").val());
+	var baseVIT = parseInt($("#VIT").val());
+	var baseAGI = parseInt($("#AGI").val());
+	var baseDEX = parseInt($("#DEX").val());
+	var STR = Math.floor(baseSTR*(1+(eq_stats[4]+eq_stats[213])/100) + (eq_stats[3]+eq_stats[212]));	//3 = STR, 4 = STR %, 212 & 213 = cloned equivalent
+	var INT = Math.floor(baseINT*(1+(eq_stats[6]+eq_stats[215])/100) + (eq_stats[5]+eq_stats[214]));	//5 = INT, 6 = INT %, 214 & 215 = cloned equivalent
+	var VIT = Math.floor(baseVIT*(1+(eq_stats[8]+eq_stats[217])/100) + (eq_stats[7]+eq_stats[216]));	//7 = VIT, 8 = VIT %, 216 & 217 = cloned equivalent
+	var AGI = Math.floor(baseAGI*(1+(eq_stats[10]+eq_stats[219])/100) + (eq_stats[9]+eq_stats[218]));	//9 = AGI, 10 = AGI %, 218 & 219 = cloned equivalent
+	var DEX = Math.floor(baseDEX*(1+(eq_stats[12]+eq_stats[221])/100) + (eq_stats[11]+eq_stats[220]));	//11 = DEX, 12 = DEX %, 220 & 221 = cloned equivalent
+	var CRT = 0, LUK = 0, MTL = 0, TEC = 0;
+	if($("#personal").val()=="CRT")	CRT = parseInt($("#personal_val").val());
+	if($("#personal").val()=="LUK")	LUK = parseInt($("#personal_val").val());
+	if($("#personal").val()=="MTL")	MTL = parseInt($("#personal_val").val());
+	if($("#personal").val()=="TEC")	TEC = parseInt($("#personal_val").val());
+
+	//------- WEAPON ATK & EQUIPMENT DEF -------
+	var main = $("#mainweapon").val();
+	var sub = $("#subweapon").val();
+
+	var mainATK = parseInt($("#mainATK").val());
+	var mainrefine = parseInt($("#mainrefine").val());
+	var mainstability = parseInt($("#mainstability").val());
+	var subATK = parseInt($("#subATK").val());
+	var subrefine = parseInt($("#subrefine").val());
+	var substability = parseInt($("#substability").val());
+
+	// Apply percent modifier: refinement, eq, skill
+	var weaponATKmodifier = 1;
+	var weaponATKsubModifier = 1;
+	weaponATKmodifier += mainrefine*mainrefine/100;
+	weaponATKmodifier += (eq_stats[74]+eq_stats[278])/100;
+	if(main=="1H Sword" || main=="2H Sword")
+		weaponATKmodifier += 0.03*skill["Sword Mastery"];
+	if(main=="1H Sword" && sub=="1H Sword"){
+		weaponATKsubModifier += 0.03*skill["Sword Mastery"];
+		weaponATKsubModifier += subrefine*subrefine/200;
+		weaponATKsubModifier += (eq_stats[74]+eq_stats[278])/100;
+	}
+	if(main=="Bow" || main=="Bowgun")
+		weaponATKmodifier += 0.03*skill["Shot Mastery"];
+	if(main=="Staff" || main=="Magic Device")
+		weaponATKmodifier += 0.03*skill["Magic Mastery"];
+	if(main=="Knuckle")
+		weaponATKmodifier += 0.03*skill["Martial Mastery"];
+	if(main=="Halberd")
+		weaponATKmodifier += 0.03*skill["Halberd Mastery"];
+	if(main=="Katana")
+		weaponATKmodifier += 0.03*skill["Bushido"];
+	if(main != "Bare Hand" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10)))
+		weaponATKmodifier += skill["Two Handed"]/100;
+
+	var weaponATK = Math.trunc(mainATK * weaponATKmodifier);
+	var weaponATKsub = Math.trunc(subATK * weaponATKsubModifier);
+
+	// Apply flat modifier: refinement, eq, skill
+	weaponATK += eq_stats[73]+eq_stats[277];	//73 = Weapon ATK, 277 = cloned equivalent (for items with 2 same stats)
+	weaponATK += mainrefine;
+	weaponATKsub += subrefine;
+	weaponATKsub += eq_stats[73]+eq_stats[277];
+	if(main=="Bow" && sub=="Arrow")
+		weaponATK += subATK;
+	if(main=="Bow" && sub=="Katana")
+		weaponATK += Math.min(mainATK*mainstability/100,subATK)*0.1*skill["Samurai Archery"];
+	if(main=="Bowgun" && sub=="Arrow")
+		weaponATK += subATK/2;
+	if(main=="Bare Hand" && sub=="None")
+		weaponATK += 0.1*skill["Unarmed Mastery"]*Lv
+
+	var armortype = $("#armortype").val();
+	var equipmentDEF = parseInt($("#armorDEF").val());
+		equipmentDEF += parseInt($("#addDEF").val());
+		equipmentDEF += parseInt($("#spcDEF").val());
+	if(sub=="Shield")	equipmentDEF += subATK;
+
+	var totalarmorrefine = parseInt($("#armorrefine").val());
+		totalarmorrefine += parseInt($("#addrefine").val());
+	if(sub=="Shield" || (sub=="Magic Device" && skill["Magic Skin"]>0))	totalarmorrefine += parseInt($("#subrefine").val());
+
+	var stability=mainstability;
+	if(sub=="Dagger")				stability+=substability;
+	if(main=="Bow" && sub=="Arrow") stability+=substability;
+	if(main=="Bow" && sub=="Katana" && skill["Samurai Archery"]>0) stability+=Math.trunc(substability/4);
+	if(main=="Bowgun" && sub=="Arrow")	stability+=Math.trunc(substability/2);
+	
+	var stabilitysub=0
+	if(main=="1H Sword" && sub=="1H Sword") stabilitysub+=Math.trunc(substability/2)
+
+	//------- NOT WEAPON RELATED STATS -------
+	var HIT 	= Lv + DEX;
+	var CSPD 	= Lv + AGI*1.16 + DEX*2.94;
+	var MaxHP 	= Math.trunc((VIT+22.4) * Lv/3 + 93);
+	var MaxMP 	= Math.trunc(100 + Lv + INT/10 + Math.max(TEC-1,0));
+	var CDamage 	= 150;
+	if(AGI>STR) CDamage 	= Math.trunc(150 + (STR+AGI)/10);
+	else CDamage 		= Math.trunc(150 + STR/5);
+	var CRate 	= Math.trunc(25 + CRT/3.4);
+
+	//------- DEF, MDEF, FLEE -------
+	if(armortype=="Normal Armor"){
+		DEF = Lv + VIT + equipmentDEF;
+		MDEF = Lv + INT + equipmentDEF;
+		FLEE = Lv + AGI;
+	}
+	if(armortype=="Light Armor"){
+		DEF = Math.trunc(Lv*0.8 + VIT*0.25 + equipmentDEF);
+		MDEF = Math.trunc(Lv*0.8 + INT*0.25 + equipmentDEF);
+		FLEE = Math.trunc(Lv*1.25 + AGI*1.75 + 30);
+	}
+	if(armortype=="Heavy Armor"){
+		DEF = Math.trunc(Lv*1.2 + VIT*2 + equipmentDEF);
+		MDEF = Math.trunc(Lv*1.2 + INT*2 + equipmentDEF);
+		FLEE = Math.trunc(Lv*0.5  + AGI*0.75 - 15);
+	}
+	if(armortype=="Without Armor"){
+		DEF = Math.trunc(Lv*0.4 + VIT*0.1 + equipmentDEF);
+		MDEF = Math.trunc(Lv*0.4 + INT*0.1 + equipmentDEF);
+		FLEE = Math.trunc(Lv*1.5 + AGI*2 + 75);
+	}
+
+	//------- GUARD & EVASION -------
+	var evaRate = eq_stats[60]+eq_stats[271];	//60 = Evasion Recharge %, 271 = cloned equivalent
+	var guardRate = eq_stats[59]+eq_stats[270];	//59 = Guard Recharge %, 270 = cloned equivalent
+	var guardPower = eq_stats[58]+eq_stats[269];	//58 = Guard Power %, 269 = cloned equivalent
+
+	if(armortype=="Light Armor"){
+		evaRate += 10 + skill["Light Armor"] + skill["Advanced Evasion"];
+		guardRate -= 10;
+	}
+
+	if(armortype=="Heavy Armor"){
+		guardRate += 10 + skill["Heavy Armor"] + skill["Advanced Guard"];
+		guardPower += Math.trunc(skill["Advanced Guard"]/2);	//credit: mayam + BK.
+		evaRate -= 10;
+
+		//if not equiped with shield: Guard power is 25% (credit: BK.)
+		if(sub != "Shield")
+			guardPower += 25 ;
+	}
+
+	//------- AGGRO, AILMENT, PIERCE -------
+	var aggro = 100 + eq_stats[61] + eq_stats[272];					//61 = Aggro %, 272 = clone
+	var ailment = Math.floor(MTL/3.4) + eq_stats[57] + eq_stats[268];		//57 = Ailment Resistance %, 268 = clone
+	var phys_pierce = eq_stats[25] + eq_stats[234];				//25 = Physical Pierce %, 234 = clone
+	var mag_pierce = eq_stats[26] + eq_stats[235];				//26 = Magical Pierce %, 235 = clone
+	//if (phys_pierce > 100) phys_pierce = 100;
+	//if (mag_pierce > 100) mag_pierce = 100;		//hide these 2 for now since excessive stat will still be counted for calculations; will put the limit to the displayed values only
+
+	//------- ELEMENT RELATED -------
+	var neutral_pow = 100 + eq_stats[110] + eq_stats[254];		//110 = Stronger Against Neutral %
+	var fire_pow = 100 + eq_stats[45] + eq_stats[255];		//45 = Stronger Against Fire %
+	var water_pow = 100 + eq_stats[46] + eq_stats[256];		//46 = Stronger Against Water %
+	var wind_pow = 100 + eq_stats[47] + eq_stats[257];		//47 = Stronger Against Wind %
+	var earth_pow = 100 + eq_stats[48] + eq_stats[258];		//48 = Stronger Against Earth %
+	var light_pow = 100 + eq_stats[49] + eq_stats[259];		//49 = Stronger Against Light %
+	var dark_pow = 100 + eq_stats[50] + eq_stats[260];		//50 = Stronger Against Dark %
+	var neutral_pow_magic = 100 + eq_stats[110] + eq_stats[254];	//254~260 = clones, for items with 2 same stats
+	var fire_pow_magic = 100 + eq_stats[45] + eq_stats[255];
+	var water_pow_magic = 100 + eq_stats[46] + eq_stats[256];
+	var wind_pow_magic = 100 + eq_stats[47] + eq_stats[257];
+	var earth_pow_magic = 100 + eq_stats[48] + eq_stats[258];
+	var light_pow_magic = 100 + eq_stats[49] + eq_stats[259];
+	var dark_pow_magic = 100 + eq_stats[50] + eq_stats[260];
+	
+	var subele_neutral = neutral_pow;	var subele_fire = fire_pow;	var subele_water = water_pow;	var subele_wind = wind_pow;
+	var subele_earth = earth_pow;		var subele_light = light_pow;	var subele_dark = dark_pow;
+	var subele_neutral_magic = neutral_pow_magic;	var subele_fire_magic = fire_pow_magic;		var subele_water_magic = water_pow_magic;
+	var subele_wind_magic = wind_pow_magic;		var subele_earth_magic = earth_pow_magic;	var subele_light_magic = light_pow_magic;
+	var subele_dark_magic = dark_pow_magic;
+	
+	//for dmg calc only, not displayed
+	var nofixed_neutral = neutral_pow;
+	var nofixed_fire = fire_pow;		var nofixed_water = water_pow;		var nofixed_wind = wind_pow;
+	var nofixed_earth = earth_pow;		var nofixed_light = light_pow;		var nofixed_dark = dark_pow;
+	var nofixed_neutral_magic = neutral_pow_magic;
+	var nofixed_fire_magic = fire_pow_magic;	var nofixed_water_magic = water_pow_magic;	var nofixed_wind_magic = wind_pow_magic;
+	var nofixed_earth_magic = earth_pow_magic;	var nofixed_light_magic = light_pow_magic;	var nofixed_dark_magic = dark_pow_magic;
+	
+	var element = "Neutral";
+	var subelement = "Neutral";
+	
+	if(main=="Staff" || main=="Magic Device") {
+		if(eq_stats[62]==1)	{element = "Fire";	earth_pow += 25;	earth_pow_magic += 25;}
+		if(eq_stats[63]==1)	{element = "Water";	fire_pow += 25;		fire_pow_magic += 25;}
+		if(eq_stats[64]==1)	{element = "Wind";	water_pow += 25;	water_pow_magic += 25;}
+		if(eq_stats[65]==1)	{element = "Earth";	wind_pow += 25;		wind_pow_magic += 25;}
+		if(eq_stats[66]==1)	{element = "Light";	dark_pow += 25;		dark_pow_magic += 25;}
+		if(eq_stats[67]==1)	{element = "Dark";	light_pow += 25;	light_pow_magic += 25;}
+		
+		if(sub_ele[62]==1)	{subelement = "Fire";	subele_earth += 25;	subele_earth_magic += 25;}
+		if(sub_ele[63]==1)	{subelement = "Water";	subele_fire += 25;	subele_fire_magic += 25;}
+		if(sub_ele[64]==1)	{subelement = "Wind";	subele_water += 25;	subele_water_magic += 25;}
+		if(sub_ele[65]==1)	{subelement = "Earth";	subele_wind += 25;	subele_wind_magic += 25;}
+		if(sub_ele[66]==1)	{subelement = "Light";	subele_dark += 25;	subele_dark_magic += 25;}
+		if(sub_ele[67]==1)	{subelement = "Dark";	subele_light += 25;	subele_light_magic += 25;}
+		
+		if(element != "Neutral"){
+			neutral_pow_magic += Math.floor(baseINT/10);
+			earth_pow_magic += Math.floor(baseINT/10); fire_pow_magic += Math.floor(baseINT/10); water_pow_magic += Math.floor(baseINT/10); 
+			wind_pow_magic += Math.floor(baseINT/10); dark_pow_magic += Math.floor(baseINT/10); light_pow_magic += Math.floor(baseINT/10); 
+		}
+		if(subelement != "Neutral"){
+			subele_neutral_magic += Math.floor(baseINT/10);
+			subele_earth_magic += Math.floor(baseINT/10); subele_fire_magic += Math.floor(baseINT/10); subele_water_magic += Math.floor(baseINT/10); 
+			subele_wind_magic += Math.floor(baseINT/10); subele_dark_magic += Math.floor(baseINT/10); subele_light_magic += Math.floor(baseINT/10); 
+		}
+	}
+	
+	else {
+		if(eq_stats[62]==1)	{element = "Fire";	earth_pow += 25;	earth_pow_magic += 25 + Math.floor(baseINT/10);}
+		if(eq_stats[63]==1)	{element = "Water";	fire_pow += 25;		fire_pow_magic += 25 + Math.floor(baseINT/10);}
+		if(eq_stats[64]==1)	{element = "Wind";	water_pow += 25;	water_pow_magic += 25 + Math.floor(baseINT/10);}
+		if(eq_stats[65]==1)	{element = "Earth";	wind_pow += 25;		wind_pow_magic += 25 + Math.floor(baseINT/10);}
+		if(eq_stats[66]==1)	{element = "Light";	dark_pow += 25;		dark_pow_magic += 25 + Math.floor(baseINT/10);}
+		if(eq_stats[67]==1)	{element = "Dark";	light_pow += 25;	light_pow_magic += 25 + Math.floor(baseINT/10);}
+		
+		if(sub_ele[62]==1)	{subelement = "Fire";	subele_earth += 25;	subele_earth_magic += 25 + Math.floor(baseINT/10);}
+		if(sub_ele[63]==1)	{subelement = "Water";	subele_fire += 25;	subele_fire_magic += 25 + Math.floor(baseINT/10);}
+		if(sub_ele[64]==1)	{subelement = "Wind";	subele_water += 25;	subele_water_magic += 25 + Math.floor(baseINT/10);}
+		if(sub_ele[65]==1)	{subelement = "Earth";	subele_wind += 25;	subele_wind_magic += 25 + Math.floor(baseINT/10);}
+		if(sub_ele[66]==1)	{subelement = "Light";	subele_dark += 25;	subele_dark_magic += 25 + Math.floor(baseINT/10);}
+		if(sub_ele[67]==1)	{subelement = "Dark";	subele_light += 25;	subele_light_magic += 25 + Math.floor(baseINT/10);}
+	}
+
+	function resSoftCap(resist) {
+		var final_res = 0; //Apply efficiency reduction
+    		if (resist > 50) {
+				var iteration = resist/50;
+				var temp_res = resist*1;
+				for (let i=0; i<iteration; i++) {
+					if (temp_res <= 50) {final_res += temp_res/Math.pow(2,i);}
+					else {
+						final_res += 50/Math.pow(2,i);
+						temp_res -= 50;
+					}
+				}
+    		}
+			else if (resist < -50) {
+				var iteration = -resist/50;
+				var temp_res = resist*1;
+				for (let i=0; i<iteration; i++) {
+					if (temp_res >= -50) {final_res += temp_res*Math.pow(2,i);}
+					else {
+						final_res -= 50*Math.pow(2,i);
+						temp_res += 50;
+					}
+				}
+			}
+    		else {final_res = resist;}
+		return final_res;
+	}
+
+	var phys_res =  eq_stats[31] + eq_stats[240];		//31 = Physical Resistance %
+	if(sub=="Shield")	phys_res += skill["Force Shield"];
+	var mag_res =  eq_stats[32] + eq_stats[241];		//32 = Magical Resistance %
+	if(sub=="Shield")	mag_res += skill["Magical Shield"];
+	var neutral_res = eq_stats[75] + eq_stats[261];		//75 = Neutral Resistance %
+	var fire_res = eq_stats[51] + eq_stats[262];		//51 = Fire Resistance %
+	var water_res = eq_stats[52] + eq_stats[263];		//52 = Water Resistance %
+	var wind_res = eq_stats[53] + eq_stats[264];		//53 = Wind Resistance %
+	var earth_res = eq_stats[54] + eq_stats[265];		//54 = Earth Resistance %
+	var light_res = eq_stats[55] + eq_stats[266];		//55 = Light Resistance %
+	var dark_res = eq_stats[56] + eq_stats[267];		//56 = Dark Resistance %
+	var pres_soft = resSoftCap(phys_res);
+	var mres_soft = resSoftCap(mag_res);
+	neutral_res = resSoftCap(neutral_res);
+	fire_res = resSoftCap(fire_res);
+	water_res = resSoftCap(water_res);
+	wind_res = resSoftCap(wind_res);
+	earth_res = resSoftCap(earth_res);
+	light_res = resSoftCap(light_res);
+	dark_res = resSoftCap(dark_res);
+	var shortRD = 100 + eq_stats[69] + eq_stats[274];		//69 = Short Range Damage %
+	var longRD = 100 + eq_stats[70] + eq_stats[275];		//70 = Long Range Damage %
+	var unsheathe = 100 + eq_stats[117] + eq_stats[280];		//117 = Unsheathe Attack %
+	var unsheathe_flat = eq_stats[116] + eq_stats[279];		//116 = Unsheathe Attack +
+	var barrier_phys = eq_stats[124] + eq_stats[281];		//124 = Physical Barrier
+	var barrier_mag = eq_stats[128] + eq_stats[282];		//128 = Magic Barrier
+	var barrier_frac = eq_stats[127] + eq_stats[283];		//127 = Fractional Barrier
+	var barrier_cd = eq_stats[141] + eq_stats[284];			//141 = Barrier Cool Down %
+	var reflect = eq_stats[126] + eq_stats[289];			//126 = Reflect %
+	var add_melee = eq_stats[129] + eq_stats[285];			//129 = Additional Melee %
+	var add_magic = eq_stats[130] + eq_stats[286];			//130 = Additional Magic %
+	var anticipate = eq_stats[139] + eq_stats[287];			//139 = Anticipate %
+	var guard_break = eq_stats[140] + eq_stats[288];		//140 = Guard Break %
+		//the rightmost ones are clones of those stats, in case of items with 2 same stats
+	var no_flinch = eq_stats[122]>0?"Yes":"No";	//122 = Flinch Unavailable
+	var no_tumble = eq_stats[125]>0?"Yes":"No";	//125 = Tumble Unavailable
+	var no_stun = eq_stats[168]>0?"Yes":"No";	//168 = Stun Unavailable
+
+
+	//------- WEAPON RELATED STATS -------
+	var ATKsub=0;
+	var ATK=0;
+	var ASPD=0;
+	//------- 1H SWORD STATS -------
+	if(main=="1H Sword" && sub!="1H Sword"){
+		ATK = Lv + STR*2 + DEX*2 + weaponATK;
+		MATK = Lv + INT*3 + DEX;
+		stability += (STR+DEX*3)/40;
+		ASPD = 100 + Lv + AGI*4 + (AGI+STR-1)*0.2;
+	}
+
+	//------- 2H SWORD STATS -------
+	if(main=="2H Sword"){
+		ATK = Lv + STR*3 + DEX + weaponATK ;
+		MATK = Lv + INT*3 + DEX + 1;
+		stability += DEX*0.1;
+		ASPD = 50 + Lv + AGI*2 + (AGI+STR-1)*0.2;
+	}
+
+	//------- DUAL WIELD -------
+	if(main=="1H Sword" && sub=="1H Sword"){
+		ATK = Lv + STR + DEX*2 + AGI + weaponATK;
+		ATKsub = Lv + STR + AGI*3 + weaponATKsub;
+		MATK = Lv + INT*3 + DEX;
+		stability += (STR + DEX*3)/40;
+		stabilitysub += (STR*3 + AGI*2)/50
+		ASPD = 100 + Lv + AGI*4 + (STR+AGI-1)*0.2
+	}
+
+	//------- BOW -------
+	if(main=="Bow"){
+		ATK = Lv + STR + DEX*3 + weaponATK;
+		MATK = Lv + INT*3 + DEX;
+		stability += (STR+DEX)/20;
+		ASPD = 75 + Lv + AGI*3.1 + (AGI + DEX*2 -1)*0.1;
+	}
+
+	//------- BOWGUN -------
+	if(main=="Bowgun"){
+		ATK = Lv + DEX*4 + weaponATK;
+		MATK = Lv + INT*3 + DEX;
+		stability += STR*0.05;
+		ASPD = 30 + Lv + AGI*2.2 + DEX*0.2;
+	}
+
+	//------- STAFF -------
+	if(main=="Staff"){
+		ATK = Lv + STR*3 + INT + weaponATK;
+		MATK = Lv + INT*4 + DEX + weaponATK;
+		stability += STR*0.05;
+		//ASPD = 60 + Lv + AGI + (AGI*4 + INT -1)*0.2;
+		ASPD = 60.6 + Lv + INT*0.2 + AGI*1.8;
+	}
+
+	//------- MAGIC DEVICE -------
+	if(main=="Magic Device"){
+		ATK = Lv + INT*2 + AGI*2 + weaponATK;
+		MATK = Lv + INT*4 + DEX + weaponATK;
+		stability += DEX*0.1;
+		ASPD = 90 + Lv + AGI*4 + (INT-1)*0.2;
+	}
+
+	//------- KNUCKLE -------
+	if(main=="Knuckle"){
+		ATK = Lv + AGI*2 + DEX*0.5 + weaponATK;
+		MATK = Lv + INT*4 + DEX + weaponATK*0.5;
+		stability += DEX*0.025;
+		ASPD = 120 + Lv + AGI*4.6 + DEX*0.1 + STR*0.1;
+	}
+
+	//------- HALBERD -------
+	if(main=="Halberd"){
+		ATK = Lv + STR*2.5 + AGI*1.5 + weaponATK;
+		MATK = Lv + INT*2 + DEX + AGI;
+		stability += (STR+DEX)/20;
+		ASPD = 25 + Lv + AGI*3.5 + STR*0.2;
+	}
+
+	//------- KATANA -------
+	if(main=="Katana"){
+		ATK = Lv + STR*1.5 + DEX*2.5 + weaponATK;
+		MATK = Lv + INT*1.5 + DEX;
+		stability += (STR*3+DEX)/40;
+		ASPD = 200 + Lv + AGI*3.9 + STR*0.3;
+	}
+
+	//------- BARE HAND -------
+	if(main=="Bare Hand"){
+		ATK = Lv + STR + 1 + weaponATK;
+		MATK = Lv + INT*3 + DEX + 1;
+		stability = DEX/3 ;
+		ASPD = 1000 + Lv + AGI*9.6;
+	}
+
+	//------- APPLY ATK/MATK UP/DOWN MODIFIERS --------
+	
+	ATK 	-= Math.trunc((eq_stats[134] + eq_stats[296])/100 * baseAGI);//ATK DOWN (AGI)	134
+	ATK 	-= Math.trunc((eq_stats[133] + eq_stats[297])/100 * baseDEX);//ATK DOWN (DEX)	133
+	ATK 	-= Math.trunc((eq_stats[197] + eq_stats[294])/100 * baseINT);//ATK DOWN (INT)	197
+	ATK 	-= Math.trunc((eq_stats[132] + eq_stats[293])/100 * baseSTR);//ATK DOWN (STR)	132
+	ATK 	-= Math.trunc((eq_stats[123] + eq_stats[295])/100 * baseVIT);//ATK DOWN (VIT)	123
+	ATK 	+= Math.trunc((eq_stats[159] + eq_stats[301])/100 * baseAGI);//ATK UP (AGI)	159
+	ATK 	+= Math.trunc((eq_stats[158] + eq_stats[302])/100 * baseDEX);//ATK UP (DEX)	158
+	ATK 	+= Math.trunc((eq_stats[131] + eq_stats[299])/100 * baseINT);//ATK UP (INT)	131
+	ATK 	+= Math.trunc((eq_stats[186] + eq_stats[298])/100 * baseSTR);//ATK UP (STR)	186
+	ATK 	+= Math.trunc((eq_stats[143] + eq_stats[300])/100 * baseVIT);//ATK UP (VIT)	143; rightmost ones are cloned equvalent in case of items with 2 same stats
+
+	MATK 	-= Math.trunc((eq_stats[199] + eq_stats[306])/100 * baseAGI);//MATK DOWN (AGI)	199
+	MATK 	-= Math.trunc((eq_stats[166] + eq_stats[307])/100 * baseDEX);//MATK DOWN (DEX)	166
+	MATK 	-= Math.trunc((eq_stats[198] + eq_stats[304])/100 * baseINT);//MATK DOWN (INT)	198
+	MATK 	-= Math.trunc((eq_stats[184] + eq_stats[303])/100 * baseSTR);//MATK DOWN (STR)	184
+	MATK 	-= Math.trunc((eq_stats[161] + eq_stats[305])/100 * baseVIT);//MATK DOWN (VIT)	161
+	MATK 	+= Math.trunc((eq_stats[164] + eq_stats[311])/100 * baseAGI);//MATK UP (AGI)	164
+	MATK 	+= Math.trunc((eq_stats[200] + eq_stats[312])/100 * baseDEX);//MATK UP (DEX)	200
+	MATK 	+= Math.trunc((eq_stats[160] + eq_stats[309])/100 * baseINT);//MATK UP (INT)	160
+	MATK 	+= Math.trunc((eq_stats[163] + eq_stats[308])/100 * baseSTR);//MATK UP (STR)	163
+	MATK 	+= Math.trunc((eq_stats[162] + eq_stats[310])/100 * baseVIT);//MATK UP (VIT)	162, rightmost ones are cloned equivalens for items with 2 same stats
+
+	//------- APPLY PERCENT MODIFIER --------
+	var HITmodifier = 1;
+	if(main=="1H Sword" && sub=="1H Sword"){
+		HITmodifier = 0.4;
+		if(skill["Dual Sword Mastery"]>0)
+			HITmodifier += 0.05 + 0.03*skill["Dual Sword Mastery"];
+		if(skill["Dual Sword Control"]>0)
+			HITmodifier += 0.05 + 0.03*skill["Dual Sword Control"];
+	}
+	HITmodifier += (eq_stats[34]+eq_stats[243])/100;			//34 = Accuracy %
+	if(main != "Bare Hand" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10)))
+		HITmodifier += skill["Two Handed"]/100;
+	if(main=="Knuckle")	HITmodifier += skill["Strong Chase Attack"]/50;
+	else if(sub=="Knuckle")	HITmodifier += skill["Strong Chase Attack"]/100;
+	HIT = HIT * HITmodifier;
+
+	var CSPDmodifier = 1 + ((eq_stats[40]+eq_stats[249])/100);	 //40 = CSPD%
+	if(skill['Magic Warrior Mastery']>0 && sub=="Magic Device")
+		CSPDmodifier += (skill['Magic Warrior Mastery'] + Math.max(skill['Magic Warrior Mastery']-5,0))/100;
+	CSPD = CSPD * CSPDmodifier;
+
+	var HPmodifier = 1 + ((eq_stats[18]+eq_stats[227])/100);	//18 = MaxHP%;
+	HPmodifier += skill["HP Boost"]*0.02		// HP Boost Skill
+	MaxHP = MaxHP * HPmodifier;
+
+	var MPmodifier = 1 + (eq_stats[101]/100);	//101 = MaxMP %
+	MaxMP = MaxMP * MPmodifier;
+
+
+	var CRatemodifier = 1;
+	if(main=="1H Sword" && sub=="1H Sword"){
+		CRatemodifier = 0.4;
+		if(skill["Dual Sword Mastery"]>0)
+			CRatemodifier += 0.05 + 0.03*skill["Dual Sword Mastery"];
+		if(skill["Dual Sword Control"]>0)
+			CRatemodifier += 0.05 + 0.03*skill["Dual Sword Control"];
+	}
+	if(main=="Halberd")	CRatemodifier += Math.floor(skill["Critical Spear"]/2)/100;
+	CRatemodifier += ((eq_stats[42]+eq_stats[251])/100);		//42 = Critical %
+	CRate = CRatemodifier * CRate;
+
+	var CDMGmodifier = 1 + ((eq_stats[44]+eq_stats[253])/100);	//44 = CDamage %
+	CDMGmodifier += (Math.floor(skill["Critical Up"]/2)/100);
+	CDamage = CDamage * CDMGmodifier;
+
+	var MATK, MATKmodifier=1;
+	if(sub=="Knuckle")			MATKmodifier -= 0.15;
+	if(main=="Staff" || main=="Magic Device"){
+		if(skill["Magic Mastery"] >= 1)	MATKmodifier += 0.01;
+		if(skill["Magic Mastery"] >= 3)	MATKmodifier += 0.01;
+		if(skill["Magic Mastery"] >= 8)	MATKmodifier += 0.01;
+	}
+
+	var ASPDmodifier=1;
+	if(armortype=="Light Armor")	ASPDmodifier += 0.5;
+	if(armortype=="Heavy Armor")	ASPDmodifier -= 0.5;
+	if(sub=="Shield")				ASPDmodifier -= (0.5 - skill["Shield Mastery"]*0.05);
+		ASPDmodifier += ((eq_stats[38]+eq_stats[247])/100); 		//38 = ASPD %
+	if(main=="1H Sword" || main=="2H Sword")
+		ASPDmodifier += skill["Quick Slash"]*0.01;
+
+	if(main=="Knuckle")
+		ASPDmodifier += skill["Martial Discipline"]/100
+	ASPD = ASPD * ASPDmodifier;
+
+	var ATKmodifier=1;
+	var ATKsubmodifier = 1;
+
+	if(sub=="Magic Device")		ATKmodifier -= 0.15;
+	if(skill["Magic Warrior Mastery"]>0 && sub=="Magic Device"){
+		ATKmodifier += skill["Magic Warrior Mastery"]/100;
+		if(main=="1H Sword")	ATKmodifier += 0.05;
+	}
+	if(main=="1H Sword" || main=="2H Sword"){
+		if(skill["Sword Mastery"] >= 1)	ATKmodifier += 0.01;
+		if(skill["Sword Mastery"] >= 3)	ATKmodifier += 0.01;
+		if(skill["Sword Mastery"] >= 8)	ATKmodifier += 0.01;
+
+		if(sub=="1H Sword"){
+			if(skill["Sword Mastery"] >= 1)	ATKsubmodifier += 0.01;
+			if(skill["Sword Mastery"] >= 3)	ATKsubmodifier += 0.01;
+			if(skill["Sword Mastery"] >= 8)	ATKsubmodifier += 0.01;
+		}
+	}
+	if(main=="Knuckle"){
+		if(skill["Martial Mastery"] >= 1)	ATKmodifier += 0.01;
+		if(skill["Martial Mastery"] >= 3)	ATKmodifier += 0.01;
+		if(skill["Martial Mastery"] >= 8)	ATKmodifier += 0.01;
+	}
+	if(main=="Bow" || main=="Bowgun"){
+		if(skill["Shot Mastery"] >= 1)	ATKmodifier += 0.01;
+		if(skill["Shot Mastery"] >= 3)	ATKmodifier += 0.01;
+		if(skill["Shot Mastery"] >= 8)	ATKmodifier += 0.01;
+	}
+	if(main=="Halberd"){
+		if(skill["Halberd Mastery"] >= 1)	ATKmodifier += 0.01;
+		if(skill["Halberd Mastery"] >= 3)	ATKmodifier += 0.01;
+		if(skill["Halberd Mastery"] >= 8)	ATKmodifier += 0.01;
+	}
+	if(main=="Katana"){
+		if(skill["Bushido"] >= 1)	ATKmodifier += 0.01;
+		if(skill["Bushido"] >= 3)	ATKmodifier += 0.01;
+		if(skill["Bushido"] >= 8)	ATKmodifier += 0.01;
+	}
+	
+	//for Hunter Bowgun passive
+	if(main=="Bowgun" && sub!="None" && sub!="Arrow") ATK += Math.trunc(mainATK * Math.floor(skill["Hunter Bowgun"]*1.5)*5/300);
+	
+	ATKmodifier += ((eq_stats[21]+eq_stats[230])/100);			//21 = ATK %
+	ATK = ATKmodifier * ATK;
+
+	MATKmodifier += ((eq_stats[23]+eq_stats[232])/100);			//23 = MATK %
+	MATK = MATKmodifier * MATK;
+
+	ATKsubmodifier += ((eq_stats[21]+eq_stats[230])/100); 		//21 = ATK %
+	ATKsub = ATKsub * ATKsubmodifier;
+
+	var DEFmodifier = 1;
+	var MDEFmodifier = 1;
+	if(sub=="Arrow"){
+		DEFmodifier -= 0.25;
+		MDEFmodifier -= 0.25;
+	}
+	DEFmodifier += ((eq_stats[28]+eq_stats[237])/100);			//28 = DEF %
+	if(sub=="Shield" && skill["Force Shield"]>0)
+		DEFmodifier += (2.5 + 0.5*skill["Force Shield"] + Math.floor(skill["Force Shield"]/2)*0.5)/100;
+	DEF = DEF * DEFmodifier;
+
+	MDEFmodifier += ((eq_stats[30]+eq_stats[239])/100);			//30 = MDEF %
+	if(sub=="Shield" && skill["Magical Shield"]>0)
+		MDEFmodifier += (2.5 + 0.5*skill["Magical Shield"] + Math.floor(skill["Magical Shield"]/2)*0.5)/100;
+	MDEF = MDEF * MDEFmodifier;
+
+	var FLEEmodifier = 1 + ((eq_stats[36]+eq_stats[245])/100);	//36 = Dodge %
+	FLEE = FLEE * FLEEmodifier;
+
+	//------- APPLY FLAT MODIFIER -------
+	MaxHP   += eq_stats[17] + eq_stats[226];				//17 = MaxHP
+	MaxHP 	+= skill["HP Boost"]*100;
+	MaxHP	+= skill["Bushido"]*10;
+	if(skill["Frontliner II"] > 0)	MaxHP += skill["Frontliner II"]*100 + Lv*10;
+	if(sub=="Shield"){
+		MaxHP 	+= skill["Force Shield"]*50;
+		MaxHP 	+= skill["Magical Shield"]*50;
+	}
+	if(MaxHP > 99999)	MaxHP = 99999;
+	MaxMP	+= eq_stats[19] + eq_stats[228];					//19 = MaxMP
+	MaxMP 	+= skill["MP Boost"]*30;
+	MaxMP	+= skill["Bushido"]*10;
+	//if(MaxMP > 2000)	MaxMP = 2000;		moved this to the display and made it a bit better for displaying
+
+	HIT		+= eq_stats[33] + eq_stats[242];	//33 = Accuracy
+	HIT 	+= skill["Accuracy Up"];
+	HIT		+= skill["Bushido"];
+	CSPD	+= eq_stats[39] + eq_stats[248];	//39 = CSPD
+	if(skill['Magic Warrior Mastery']>0 && sub=="Magic Device")
+		CSPD += skill['Magic Warrior Mastery']*10;
+	CRate	+= eq_stats[41] + eq_stats[250];	//41 = Critical
+	CRate 	+= Math.ceil(skill["Critical Up"]/2);
+	if(main=="Halberd")					CRate += Math.ceil(skill["Critical Spear"]/2);
+	if(main=="Katana" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10)))	CRate += skill["Two Handed"];
+	else if(main!="Bare Hand" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10)))	CRate	+= Math.ceil(skill["Two Handed"]/2);
+	CDamage += eq_stats[43] + eq_stats[252];	//43 = C.Damage
+	ATK		+= eq_stats[20] + eq_stats[229];		//20 = ATK
+	ATK		+= Math.floor(skill["Attack Up"]*2.5)/100 * Lv;
+	ATK		+= Math.floor(skill["Intimidating Power"]*2.5)/100 * Lv;
+
+
+	MATK	+= eq_stats[22] + eq_stats[231];		//22 = MATK
+	MATK 	+= Math.floor(skill["Magic Up"]*2.5)/100 * Lv;
+	MATK 	+= Math.floor(skill["Increased Energy"]*2.5)/100 * Lv;
+	if(skill["Sword Conversion"]>0 && (main=="1H Sword" || main=="2H Sword" || main=="Bowgun")){
+		MATK += Math.trunc((skill["Sword Conversion"]*skill["Sword Conversion"])/100 * weaponATK);
+	}
+	if(skill["Sword Conversion"]>0 && main=="Knuckle"){
+		MATK += Math.trunc((skill["Sword Conversion"]*skill["Sword Conversion"])/200 * weaponATK);
+	}
+	if(skill['Magic Warrior Mastery']>0 && sub=="Magic Device")
+		MATK += skill['Magic Warrior Mastery']*2 + Math.max(skill['Magic Warrior Mastery']-5,0) ;
+
+
+	if(main=="1H Sword" && sub=="1H Sword")		ATKsub	+= eq_stats[20] + eq_stats[229];		//20 = ATK
+	ASPD	+= eq_stats[37] + eq_stats[246];		//37 = ASPD
+	if(main=="Knuckle")				ASPD += skill["Martial Discipline"]*10;
+	if(main=="1H Sword" || main=="2H Sword")	ASPD += skill["Quick Slash"] * 10;
+	if(main=="1H Sword" && sub=="1H Sword")		ASPD += 50*skill["Dual Sword Control"];
+
+	DEF		+= eq_stats[27] + eq_stats[236];	//27 = DEF
+	if(sub=="Shield" && skill["Force Shield"]>0)
+		DEF 	+= 5 + Math.floor(skill["Force Shield"]*1.5);
+	DEF 	+= Math.floor(skill["Defense Up"]*2.5)/100 * Lv;
+	DEF 	+= Math.floor(skill["Defense Mastery"]*2.5)/100 * Lv;
+	MDEF	+= eq_stats[29] + eq_stats[238];				//29 = MDEF
+	if(sub=="Shield" && skill["Magical Shield"]>0)
+		MDEF 	+= 5 + Math.floor(skill["Magical Shield"]*1.5);
+	MDEF 	+= Math.floor(skill["Defense Up"]*2.5)/100 * Lv;
+	MDEF 	+= Math.floor(skill["Defense Mastery"]*2.5)/100 * Lv;
+	FLEE 	+= eq_stats[35];				//35 = Dodge
+	FLEE 	+= skill["Dodge Up"];
+	FLEE 	+= skill["Ninja Spirit"];
+	
+	stability += eq_stats[24] + eq_stats[233];				//24 = stability
+	if(main=="1H Sword" && sub=="1H Sword")		stabilitysub += eq_stats[24] + eq_stats[233];
+	if(main=="Katana" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10)))	stability += skill["Two Handed"];
+	else if(main!="Bare Hand" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10))) stability += Math.ceil(skill["Two Handed"]/2);
+	//if(stability > 100)	stability = 100;	moved the "change" to display for better reading
+	if(stabilitysub > 100)	stabilitysub = 100;
+	//if(main=="Staff" && stability >90)		stability = 90;
+	//if(main=="Magic Device" && stability >80)	stability = 80;
+	if(main=="1H Sword" && sub=="1H Sword")		unsheathe += Math.floor(skill["God Speed"]*2.5);
+	else						unsheathe += Math.floor(skill["God Speed"]*1.5);
+
+	//------- Motion Speed --------
+	var motionspeed = eq_stats[71] + eq_stats[276];
+	if(ASPD>1000)	motionspeed += (ASPD-1000)/180;
+
+	//------- AMPR --------
+	// this calculated last because it depends on MaxMP, which depends on various aspects.
+	//Base AMPR
+	var AMPR = 10 + Math.min(Math.max(0,MaxMP),2000)/100;
+	//Apply percent modifier
+	var AMPRmodifier = 1;
+	AMPRmodifier += eq_stats[165]/100;	//165 = AMPR%
+	AMPR = Math.trunc(AMPRmodifier * AMPR);
+	//Apply flat modifier
+	if(main=="Knuckle")	AMPR += Math.floor(skill["Aggravate"]/2);
+	if(main=="Bare Hand" && sub=="None")	AMPR += Math.floor(skill["Ultima Qi Charge"]/2);
+	AMPR += eq_stats[68] + eq_stats[273];	//68 = AMPR
+	//Special case: dual wield
+	if(main=="1H Sword" && sub=="1H Sword")
+		AMPR *= 2; //attack twice, so double AMPR
+
+	//-------- Crit Damage soft cap --------
+	if(CDamage>300)		CDamage = 300+((CDamage-300)/2);
+	
+	//------- Magic Stability & Critical --------
+	//assuming no weaken ailment
+	var MStability = (stability+100)/2;
+	//if(MStability > 100)	MStability = 100;	moved to display for better reading
+	
+	var MCRateConvert = skill["Spell Burst"]*0.025;
+	if(main=="Staff" && element == "Neutral") MCRateConvert += 0.25;
+	var MCDamageConvert = 0.5 + skill["Spell Burst"]*0.025;
+	var MCRate = Math.trunc(CRate * MCRateConvert);
+	var MCDamage = Math.trunc(100+((CDamage-100) * MCDamageConvert));
+
+	//-------- ATK when Crit --------
+	//special for two handed skill
+	if(main=="Katana" && (sub=="None" || (sub=="Ninjutsu Scroll" && skill["Ninja Spirit"]==10)))
+		ATKcrit = ATK * (1 + skill["Two Handed"]*0.05);
+	else
+		ATKcrit = ATK;
+
+	//-------- Damage Calculation --------	
+	var mob_level = parseInt($("#mob_level").val());
+	var mob_def = parseInt($("#mob_def").val());
+	var mob_mdef = parseInt($("#mob_mdef").val());
+	var mob_physres = parseInt($("#mob_physres").val());
+	var mob_magres = parseInt($("#mob_magres").val());
+	var mob_weapres = parseInt($("#mob_weapres").val());
+	
+	var mob_newDef = mob_def*(1-(Math.trunc(phys_pierce)/100));
+	var mob_newMDef = mob_mdef*(1-(Math.trunc(mag_pierce)/100));
+	
+	var stab = Math.min(Math.max(1,stability),100);
+	
+	var ele_modifier_automain = 1;
+	var ele_modifier_autosub = 1;
+	
+	switch($("#mob_ele").val()){
+		case 'neutral'  : ele_modifier_automain=neutral_pow/100; ele_modifier_autosub=subele_neutral/100; break;
+		case 'fire'  	: ele_modifier_automain=fire_pow/100; ele_modifier_autosub=subele_fire/100; break;
+		case 'water'  	: ele_modifier_automain=water_pow/100; ele_modifier_autosub=subele_water/100; break;
+		case 'wind'  	: ele_modifier_automain=wind_pow/100; ele_modifier_autosub=subele_wind/100; break;
+		case 'earth'  	: ele_modifier_automain=earth_pow/100; ele_modifier_autosub=subele_earth/100; break;
+		case 'light'  	: ele_modifier_automain=light_pow/100; ele_modifier_autosub=subele_light/100; break;
+		case 'dark'  	: ele_modifier_automain=dark_pow/100; ele_modifier_autosub=subele_dark/100; break;
+	}
+
+	var auto_dist_modifier = 1;
+	switch($("#autoatk_dist").val()){
+		case 'short'	: auto_dist_modifier=shortRD/100; break;
+		case 'long'	: auto_dist_modifier=longRD/100; break;
+	}
+	
+	var auto_const = parseInt($("#autoatk_const").val());
+	var auto_mult = parseInt($("#autoatk_mult").val()*100)/100;
+	var autosub_const = parseInt($("#autosub_const").val());
+	var autosub_mult = parseInt($("#autosub_mult").val()*100)/100;
+	
+	var baseauto = Math.trunc(ATK);
+	var baseautocrit = Math.trunc(ATKcrit);
+	var baseautosub = Math.trunc(ATKsub);
+	
+	var base_auto = Math.trunc(((Lv + baseauto - mob_level)*((100-mob_physres)/100)*((100-mob_weapres)/100))-mob_newDef);
+	var base_auto_crit = Math.trunc(((Lv + baseautocrit - mob_level)*((100-mob_physres)/100)*((100-mob_weapres)/100))-mob_newDef);
+	var base_auto_sub = Math.trunc(((Lv + baseautosub - mob_level)*((100-mob_physres)/100)*((100-mob_weapres)/100))-mob_newDef);
+	
+	if($("#autoatk_unsheathe").val()=='yes'){
+		base_auto += unsheathe_flat;
+		base_auto_crit += unsheathe_flat;
+		base_auto_sub += unsheathe_flat;
+	}
+
+	var auto = Math.trunc((base_auto + auto_const) * auto_mult * ele_modifier_automain * auto_dist_modifier);
+	var auto_crit = Math.trunc((base_auto_crit + auto_const) * auto_mult * CDamage/100 * ele_modifier_automain * auto_dist_modifier);
+	var auto_sub = Math.trunc((base_auto_sub + autosub_const) * autosub_mult * ele_modifier_autosub * auto_dist_modifier);
+	var auto_sub_crit = Math.trunc((base_auto_sub + autosub_const) * autosub_mult * CDamage/100 * ele_modifier_autosub * auto_dist_modifier);
+	if($("#autoatk_unsheathe").val()=='yes'){
+		auto = Math.trunc(auto * (unsheathe/100));
+		auto_crit = Math.trunc(auto_crit * (unsheathe/100));
+		auto_sub = Math.trunc(auto_sub * (unsheathe/100));
+		auto_sub_crit = Math.trunc(auto_sub_crit * (unsheathe/100));
+	}
+
+	$("#auto_min").html(formatNumber(Math.max(1,Math.trunc(auto*stab/100))));
+	$("#auto_max").html(formatNumber(Math.max(1,Math.trunc(auto))));
+	$("#auto_avg").html(formatNumber(Math.max(1,Math.trunc(auto*(100+stab)/200))));
+	$("#crit_min").html(formatNumber(Math.max(1,Math.trunc(auto_crit*stab/100))));
+	$("#crit_max").html(formatNumber(Math.max(1,Math.trunc(auto_crit))));
+	$("#crit_avg").html(formatNumber(Math.max(1,Math.trunc(auto_crit*(100+stab)/200))));
+	$("#autosub_min").html(formatNumber(Math.max(1,Math.trunc(auto_sub*stab/100))));
+	$("#autosub_max").html(formatNumber(Math.max(1,Math.trunc(auto_sub))));
+	$("#autosub_avg").html(formatNumber(Math.max(1,Math.trunc(auto_sub*(100+stab)/200))));
+	$("#critsub_min").html(formatNumber(Math.max(1,Math.trunc(auto_sub_crit*stab/100))));
+	$("#critsub_max").html(formatNumber(Math.max(1,Math.trunc(auto_sub_crit))));
+	$("#critsub_avg").html(formatNumber(Math.max(1,Math.trunc(auto_sub_crit*(100+stab)/200))));
+
+	var skill_phys_pierce = phys_pierce + parseInt($("#skill_ppierce").val());
+	var skill_mag_pierce = mag_pierce + parseInt($("#skill_mpierce").val());
+	if (skill_phys_pierce > 100) skill_phys_pierce = 100;
+	if (skill_mag_pierce > 100) skill_mag_pierce = 100;
+	
+	var mob_skillDef = 0
+	var mob_skillMDef = 0
+	
+	var skill_stab = Math.min(Math.max(1,stability + parseInt($("#skill_stab").val())),100);
+	var stabsub = Math.min(Math.max(0,stabilitysub),100);
+	var skill_stab_magic = Math.min(Math.max(1,MStability + parseInt($("#skill_stab").val())),100);
+	var MStabMinLimit = Math.min(skill_stab_magic,90);
+	var MStabMaxLimit = Math.max(skill_stab_magic+10,100);
+	
+	var ele_modifier_physical = 1;
+	var ele_modifier_magic = 1;
+	
+	var primary_neutral = nofixed_neutral;
+	var primary_fire = nofixed_fire;			var primary_water = nofixed_water;			var primary_wind = nofixed_wind;
+	var primary_earth = nofixed_earth;			var primary_light = nofixed_light;			var primary_dark = nofixed_dark;
+	var primary_neutral_magic = nofixed_neutral_magic;
+	var primary_fire_magic = nofixed_fire_magic;		var primary_water_magic = nofixed_water_magic;		var primary_wind_magic = nofixed_wind_magic;
+	var primary_earth_magic = nofixed_earth_magic;		var primary_light_magic = nofixed_light_magic;		var primary_dark_magic = nofixed_dark_magic;
+	var secondary_neutral = 1;
+	var secondary_fire = 1;			var secondary_water = 1;		var secondary_wind = 1;
+	var secondary_earth = 1;		var secondary_light = 1;		var secondary_dark = 1;
+	var secondary_neutral_magic = 1;
+	var secondary_fire_magic = 1;		var secondary_water_magic = 1;		var secondary_wind_magic = 1;
+	var secondary_earth_magic = 1;		var secondary_light_magic = 1;		var secondary_dark_magic = 1;
+	
+	if(main=="Staff" || main=="Magic Device"){
+		switch($("#skill_ele1").val()){
+			case 'mainwp'	: 
+				primary_neutral = neutral_pow;
+				primary_fire = fire_pow;		primary_water = water_pow;		primary_wind = wind_pow;
+				primary_earth = earth_pow;		primary_light = light_pow;		primary_dark = dark_pow;
+				primary_neutral_magic = neutral_pow_magic;
+				primary_fire_magic = fire_pow_magic;		primary_water_magic = water_pow_magic;		primary_wind_magic = wind_pow_magic;
+				primary_earth_magic = earth_pow_magic;		primary_light_magic = light_pow_magic;		primary_dark_magic = dark_pow_magic;
+				break;
+			case 'subwp'	: 
+				primary_neutral = subele_neutral;
+				primary_fire = subele_fire;		primary_water = subele_water;		primary_wind = subele_wind;
+				primary_earth = subele_earth;		primary_light = subele_light;		primary_dark = subele_dark;
+				primary_neutral_magic = subele_neutral_magic;
+				primary_fire_magic = subele_fire_magic;		primary_water_magic = subele_water_magic;	primary_wind_magic = subele_wind_magic;
+				primary_earth_magic = subele_earth_magic;	primary_light_magic = subele_light_magic;	primary_dark_magic = subele_dark_magic;
+				break;
+			case 'neutral'	: break;
+			case 'fire'		: primary_earth += 25; primary_earth_magic += 25; break;
+			case 'water'	: primary_fire += 25; primary_fire_magic += 25; break;
+			case 'wind'		: primary_water += 25; primary_water_magic += 25; break;
+			case 'earth'	: primary_wind += 25; primary_wind_magic += 25; break;
+			case 'light'	: primary_dark += 25; primary_dark_magic += 25; break;
+			case 'dark'		: primary_light += 25; primary_light_magic += 25; break;
+		}
+		if($("#skill_ele1").val() == 'fire' || $("#skill_ele1").val() == 'water' || $("#skill_ele1").val() == 'wind'
+			|| $("#skill_ele1").val() == 'earth' || $("#skill_ele1").val() == 'light' || $("#skill_ele1").val() == 'dark'){
+			primary_neutral_magic += Math.floor(baseINT/10);
+			primary_earth_magic += Math.floor(baseINT/10); primary_fire_magic += Math.floor(baseINT/10); primary_water_magic += Math.floor(baseINT/10); 
+			primary_wind_magic += Math.floor(baseINT/10); primary_dark_magic += Math.floor(baseINT/10); primary_light_magic += Math.floor(baseINT/10); 
+		}
+	}
+	else{
+		switch($("#skill_ele1").val()){
+			case 'mainwp'	: 
+				primary_neutral = neutral_pow;
+				primary_fire = fire_pow;		primary_water = water_pow;		primary_wind = wind_pow;
+				primary_earth = earth_pow;		primary_light = light_pow;		primary_dark = dark_pow;
+				primary_neutral_magic = neutral_pow_magic;
+				primary_fire_magic = fire_pow_magic;		primary_water_magic = water_pow_magic;		primary_wind_magic = wind_pow_magic;
+				primary_earth_magic = earth_pow_magic;		primary_light_magic = light_pow_magic;		primary_dark_magic = dark_pow_magic;
+				break;
+			case 'subwp'	: 
+				primary_neutral = subele_neutral;
+				primary_fire = subele_fire;		primary_water = subele_water;		primary_wind = subele_wind;
+				primary_earth = subele_earth;		primary_light = subele_light;		primary_dark = subele_dark;
+				primary_neutral_magic = subele_neutral_magic;
+				primary_fire_magic = subele_fire_magic;		primary_water_magic = subele_water_magic;	primary_wind_magic = subele_wind_magic;
+				primary_earth_magic = subele_earth_magic;	primary_light_magic = subele_light_magic;	primary_dark_magic = subele_dark_magic;
+				break;
+			case 'neutral'	: break;
+			case 'fire'	: primary_earth += 25; primary_earth_magic += 25 + Math.floor(baseINT/10); break;
+			case 'water'	: primary_fire += 25; primary_fire_magic += 25 + Math.floor(baseINT/10); break;
+			case 'wind'	: primary_water += 25; primary_water_magic += 25 + Math.floor(baseINT/10); break;
+			case 'earth'	: primary_wind += 25; primary_wind_magic += 25 + Math.floor(baseINT/10); break;
+			case 'light'	: primary_dark += 25; primary_dark_magic += 25 + Math.floor(baseINT/10); break;
+			case 'dark'	: primary_light += 25; primary_light_magic += 25 + Math.floor(baseINT/10); break;
+		}
+	}
+
+	switch($("#skill_ele2").val()){
+		case 'no'	: break;
+		case 'subwp'	: 
+			secondary_fire = subele_fire;		secondary_water = subele_water;		secondary_wind = subele_wind;
+			secondary_earth = subele_earth;		secondary_light = subele_light;		secondary_dark = subele_dark;
+			secondary_fire_magic = subele_fire_magic;	secondary_water_magic = subele_water_magic;	secondary_wind_magic = subele_wind_magic;
+			secondary_earth_magic = subele_earth_magic;	secondary_light_magic = subele_light_magic;	secondary_dark_magic = subele_dark_magic;
+			break;
+	}
+
+	if($("#skill_ele2").val() == 'subwp'){
+		switch($("#mob_ele").val()){
+			case 'neutral'  : ele_modifier_physical=primary_neutral/100; ele_modifier_magic=primary_neutral_magic/100; break;
+			case 'fire'  	: ele_modifier_physical=Math.max(primary_fire,secondary_fire)/100; ele_modifier_magic=Math.max(primary_fire_magic,secondary_fire_magic)/100; break;
+			case 'water'  	: ele_modifier_physical=Math.max(primary_water,secondary_water)/100; ele_modifier_magic=Math.max(primary_water_magic,secondary_water_magic)/100; break;
+			case 'wind'  	: ele_modifier_physical=Math.max(primary_wind,secondary_wind)/100; ele_modifier_magic=Math.max(primary_wind_magic,secondary_wind_magic)/100; break;
+			case 'earth'  	: ele_modifier_physical=Math.max(primary_earth,secondary_earth)/100; ele_modifier_magic=Math.max(primary_earth_magic,secondary_earth_magic)/100; break;
+			case 'light'  	: ele_modifier_physical=Math.max(primary_light,secondary_light)/100; ele_modifier_magic=Math.max(primary_light_magic,secondary_light_magic)/100; break;
+			case 'dark'  	: ele_modifier_physical=Math.max(primary_dark,secondary_dark)/100; ele_modifier_magic=Math.max(primary_dark_magic,secondary_dark_magic)/100; break;
+		}
+	}
+	else{
+		switch($("#mob_ele").val()){
+			case 'neutral'  : ele_modifier_physical=primary_neutral/100; ele_modifier_magic=primary_neutral_magic/100; break;
+			case 'fire'  	: ele_modifier_physical=primary_fire/100; ele_modifier_magic=primary_fire_magic/100; break;
+			case 'water'  	: ele_modifier_physical=primary_water/100; ele_modifier_magic=primary_water_magic/100; break;
+			case 'wind'  	: ele_modifier_physical=primary_wind/100; ele_modifier_magic=primary_wind_magic/100; break;
+			case 'earth'  	: ele_modifier_physical=primary_earth/100; ele_modifier_magic=primary_earth_magic/100; break;
+			case 'light'  	: ele_modifier_physical=primary_light/100; ele_modifier_magic=primary_light_magic/100; break;
+			case 'dark'  	: ele_modifier_physical=primary_dark/100; ele_modifier_magic=primary_dark_magic/100; break;
+		}
+	}
+
+	var skill_dist_modifier = 1;
+	switch($("#skill_dist").val()){
+		case 'short'	: skill_dist_modifier=(shortRD + parseInt($("#skill_srd").val()))/100; break;
+		case 'long'	: skill_dist_modifier=(longRD + parseInt($("#skill_lrd").val()))/100; break;
+		case 'placed'	: skill_dist_modifier=1; break;
+	}
+	
+	var basephys = 0;
+	var basephyscrit = 0;
+	var basemag = 0;
+	
+	switch($("#skill_physbasedmg").val()){
+		case 'atk':	basephys = Math.trunc(ATK); basephyscrit = Math.trunc(ATKcrit); break;
+		case 'matk':	basephys = Math.trunc(MATK); basephyscrit = Math.trunc(MATK); break;
+		case 'dual':
+			if(main=="1H Sword" && sub=="1H Sword") {basephys = Math.trunc(ATK + ATKsub*stabsub/100); basephyscrit = Math.trunc(ATKcrit + ATKsub*stabsub/100);}
+			else {basephys = Math.trunc(ATK); basephyscrit = Math.trunc(ATKcrit);}
+			break;
+		case 'custom1':	basephys = Math.trunc(ATK + MATK); basephyscrit = Math.trunc(ATKcrit + MATK); break;
+		case 'custom2':	basephys = Math.trunc(ATK + MATK/2); basephyscrit = Math.trunc(ATKcrit + MATK/2); break;
+	}
+	
+	switch($("#skill_magbasedmg").val()){
+		case 'atk':	basemag = Math.trunc(ATK); break;
+		case 'matk':	basemag = Math.trunc(MATK); break;
+		case 'wizard':	basemag = Math.trunc(ATK*25/100 + MATK*75/100); break;
+		case 'custom1':	basemag = Math.trunc(ATK + MATK); break;
+		case 'custom2':	basemag = Math.trunc(ATK + MATK/2); break;
+	}
+	
+	switch($("#skill_pdefuse").val()){
+		case 'phy':	mob_skillDef = mob_def*(1-(Math.trunc(skill_phys_pierce)/100)); break;
+		case 'mag':	mob_skillDef = mob_mdef*(1-(Math.trunc(skill_mag_pierce)/100)); break;
+	}
+	
+	switch($("#skill_mdefuse").val()){
+		case 'phy':	mob_skillMDef = mob_def*(1-(Math.trunc(skill_phys_pierce)/100)); break;
+		case 'mag':	mob_skillMDef = mob_mdef*(1-(Math.trunc(skill_mag_pierce)/100));break;
+	}
+	
+	var base_physical = Math.trunc(((Lv + basephys - mob_level)*((100-mob_physres)/100)*((100-mob_weapres)/100))-mob_skillDef);
+	var base_physical_crit = Math.trunc(((Lv + basephyscrit - mob_level)*((100-mob_physres)/100)*((100-mob_weapres)/100))-mob_skillDef);
+	var base_magic = Math.trunc(((Lv + basemag - mob_level)*((100-mob_magres)/100)*((100-mob_weapres)/100))-mob_skillMDef);
+
+	if($("#skill_unsheathe").val()=='yes'){
+		base_physical += unsheathe_flat;
+		base_physical_crit += unsheathe_flat;
+		base_magic += unsheathe_flat;
+	}
+
+	var skill_const = parseInt($("#skill_const").val());
+	var skill_mult = parseInt($("#skill_mult").val()*100)/100;
+	
+	var other_skill = parseInt($("#other_skill").val())/100;
+	var other_combo = parseInt($("#other_combo").val())/100;
+	var other_prorate = parseInt($("#other_prorate").val())/100;
+
+	var skill_norm = Math.trunc((base_physical + skill_const)*skill_mult);
+		skill_norm = Math.trunc(skill_norm * ele_modifier_physical);
+		skill_norm = Math.trunc(skill_norm * skill_dist_modifier);
+		if($("#skill_unsheathe").val()=='yes')
+			skill_norm = Math.trunc(skill_norm * (unsheathe/100));
+		skill_norm = Math.trunc(skill_norm * other_skill);
+		skill_norm = Math.trunc(skill_norm * other_combo);
+		skill_norm = Math.trunc(skill_norm * other_prorate);
+
+	var magic_norm = Math.trunc((base_magic + skill_const)*skill_mult);
+		magic_norm = Math.trunc(magic_norm * ele_modifier_magic);
+		magic_norm = Math.trunc(magic_norm * skill_dist_modifier);
+		if($("#skill_unsheathe").val()=='yes')
+			magic_norm = Math.trunc(magic_norm * (unsheathe/100));
+		magic_norm = Math.trunc(magic_norm * other_skill);
+		magic_norm = Math.trunc(magic_norm * other_combo);
+		magic_norm = Math.trunc(magic_norm * other_prorate);
+
+	var skill_crit = Math.trunc((base_physical_crit + skill_const)*skill_mult);
+		skill_crit = Math.trunc(skill_crit * ele_modifier_physical);
+		skill_crit = Math.trunc(skill_crit * skill_dist_modifier);
+		skill_crit = Math.trunc(skill_crit * (CDamage + parseInt($("#skill_cdmg").val()))/100);
+		if($("#skill_unsheathe").val()=='yes')
+			skill_crit = Math.trunc(skill_crit * (unsheathe/100));
+		skill_crit = Math.trunc(skill_crit * other_skill);
+		skill_crit = Math.trunc(skill_crit * other_combo);
+		skill_crit = Math.trunc(skill_crit * other_prorate);
+
+	var magic_crit = Math.trunc((base_magic + skill_const)*skill_mult);
+		magic_crit = Math.trunc(magic_crit * ele_modifier_magic);
+		magic_crit = Math.trunc(magic_crit * skill_dist_modifier);
+		magic_crit = Math.trunc(magic_crit * (MCDamage + parseInt($("#skill_cdmg").val()))/100);
+		if($("#skill_unsheathe").val()=='yes')
+			magic_crit = Math.trunc(magic_crit * (unsheathe/100));
+		magic_crit = Math.trunc(magic_crit * other_skill);
+		magic_crit = Math.trunc(magic_crit * other_combo);
+		magic_crit = Math.trunc(magic_crit * other_prorate);
+
+	$("#skill_min").html(formatNumber(Math.max(1,Math.trunc(skill_norm*skill_stab/100))));
+	$("#skill_max").html(formatNumber(Math.max(1,Math.trunc(skill_norm))));
+	$("#skill_avg").html(formatNumber(Math.max(1,Math.trunc(skill_norm*(100+skill_stab)/200))));
+	$("#skillcrit_min").html(formatNumber(Math.max(1,Math.trunc(skill_crit*skill_stab/100))));
+	$("#skillcrit_max").html(formatNumber(Math.max(1,Math.trunc(skill_crit))));
+	$("#skillcrit_avg").html(formatNumber(Math.max(1,Math.trunc(skill_crit*(100+skill_stab)/200))));
+
+	$("#magic_min").html(formatNumber(Math.max(1,Math.trunc(magic_norm*MStabMinLimit/100))));
+	$("#magic_max").html(formatNumber(Math.max(1,Math.trunc(magic_norm*MStabMaxLimit/100))));
+	$("#magic_avg").html(formatNumber(Math.max(1,Math.trunc(magic_norm*(MStabMaxLimit+MStabMinLimit)/200))));
+	$("#magiccrit_min").html(formatNumber(Math.max(1,Math.trunc(magic_crit*MStabMinLimit/100))));
+	$("#magiccrit_max").html(formatNumber(Math.max(1,Math.trunc(magic_crit*MStabMaxLimit/100))));
+	$("#magiccrit_avg").html(formatNumber(Math.max(1,Math.trunc(magic_crit*(MStabMaxLimit+MStabMinLimit)/200))));
+
+	// Displaying
+	$("#DEF").html(Math.trunc(DEF));
+	$("#MDEF").html(Math.trunc(MDEF));
+	$("#FLEE").html(Math.trunc(FLEE));
+	$("#HIT").html(Math.trunc(HIT));
+	$("#CSPD").html(Math.trunc(CSPD));
+	$("#MaxHP").html(Math.trunc(MaxHP));
+	$("#MaxMP").html(Math.trunc(MaxMP) + " (" + Math.min(Math.max(0,Math.trunc(MaxMP)),2000) + ")");
+	$("#AMPR").html(Math.trunc(AMPR));
+	$("#CRate").html(Math.trunc(CRate) + " %");
+	$("#CDamage").html(Math.trunc(CDamage) + " %");
+	$("#ATK").html(Math.trunc(ATK));
+	$("#ATKcrit").html(Math.trunc(ATKcrit));
+	$("#MATK").html(Math.trunc(MATK));
+	$("#mag_stability").html(Math.trunc(MStability) + " % (" + Math.min(Math.max(1,Math.trunc(MStability)),90) + "~" + Math.min(Math.max(100,Math.trunc(MStability)+10),110) + "%)");
+	$("#MCRate").html(Math.trunc(MCRate) + " %");
+	$("#MCDamage").html(Math.trunc(MCDamage) + " %");
+	$("#ASPD").html(Math.trunc(ASPD));
+	$("#motionspeed").html(Math.floor(motionspeed) + " %");
+	$("#stability").html(Math.trunc(stability) + " % (" + Math.min(Math.max(1,Math.trunc(stability)),100) + "~100%)");
+	$("#ATKsub").html(Math.trunc(ATKsub));
+	$("#stabilitysub").html(Math.trunc(stabilitysub) + " %");
+	$("#GRate").html(Math.trunc(guardRate) + " %");
+	$("#GPower").html(Math.trunc(guardPower) + " %");
+	$("#ERate").html(Math.trunc(evaRate) + " %");
+	$("#phys_pierce").html(Math.min(Math.trunc(phys_pierce),100) + " %");
+	$("#mag_pierce").html(Math.min(Math.trunc(mag_pierce),100) + " %");
+	$("#phys_res").html(Math.trunc(phys_res) + " % (" + Math.trunc(pres_soft) + "%)");
+	$("#mag_res").html(Math.trunc(mag_res) + " % (" + Math.trunc(mres_soft) + "%)");
+	$("#armor_refine").html(Math.trunc(totalarmorrefine) + " %");
+	$("#ailment").html(Math.trunc(ailment) + " %");
+	$("#aggro").html(Math.trunc(aggro) + " %");
+	$("#barrier_cd").html(Math.trunc(barrier_cd) + " %");
+	$("#barrier_magic").html(Math.trunc(barrier_mag));
+	$("#barrier_physical").html(Math.trunc(barrier_phys));
+	$("#barrier_frac").html(Math.trunc(barrier_frac) + " %");
+	$("#reflect").html(Math.trunc(reflect) + " %");
+	$("#shortRD").html(Math.trunc(shortRD) + " %");
+	$("#longRD").html(Math.trunc(longRD) + " %");
+	$("#unsheathe").html(Math.trunc(unsheathe) + " %");
+	$("#unsheathe_flat").html(Math.trunc(unsheathe_flat));
+	$("#add_melee").html(Math.trunc(add_melee) + " %");
+	$("#add_magic").html(Math.trunc(add_magic) + " %");
+	$("#anticipate").html(Math.trunc(anticipate) + " %");
+	$("#guard_break").html(Math.trunc(guard_break) + " %");
+	$("#element").html(element);
+	$("#subelement").html(subelement);
+	$("#neutral_pow").html(Math.trunc(neutral_pow) + " %");
+	$("#neutral_pow_magic").html(Math.trunc(neutral_pow_magic) + " %");
+	$("#neutral_res").html(Math.trunc(neutral_res) + " %");
+	$("#fire_pow").html(Math.trunc(fire_pow) + " %");
+	$("#fire_pow_magic").html(Math.trunc(fire_pow_magic) + " %");
+	$("#fire_res").html(Math.trunc(fire_res) + " %");
+	$("#water_pow").html(Math.trunc(water_pow) + " %");
+	$("#water_pow_magic").html(Math.trunc(water_pow_magic) + " %");
+	$("#water_res").html(Math.trunc(water_res) + " %");
+	$("#wind_pow").html(Math.trunc(wind_pow) + " %");
+	$("#wind_pow_magic").html(Math.trunc(wind_pow_magic) + " %");
+	$("#wind_res").html(Math.trunc(wind_res) + " %");
+	$("#earth_pow").html(Math.trunc(earth_pow) + " %");
+	$("#earth_pow_magic").html(Math.trunc(earth_pow_magic) + " %");
+	$("#earth_res").html(Math.trunc(earth_res) + " %");
+	$("#light_pow").html(Math.trunc(light_pow) + " %");
+	$("#light_pow_magic").html(Math.trunc(light_pow_magic) + " %");
+	$("#light_res").html(Math.trunc(light_res) + " %");
+	$("#dark_pow").html(Math.trunc(dark_pow) + " %");
+	$("#dark_pow_magic").html(Math.trunc(dark_pow_magic) + " %");
+	$("#dark_res").html(Math.trunc(dark_res) + " %");
+	$("#no_flinch").html(no_flinch);
+	$("#no_tumble").html(no_tumble);
+	$("#no_stun").html(no_stun);
+}
+
