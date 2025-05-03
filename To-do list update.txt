@@ -1,12 +1,12 @@
 Things to do when update:
-1. Update the 'left side' menu
+1. Update the 'left side' menu (1 step)
 --| copy <!-- START LEFT SIDE BAR MENU --> from inde.html
 --| paste to new html file 
-2. Update awesome font
+2. Update awesome font (2 step)
 --| add this code to html file, inside <head> </head>
 --| <link rel="stylesheet" href="index_files/all.min.css">
 --| copy 'webfonts' folder & all.min.css from index to html_files
-3. Add version changes update
+3. Add version changes update (1 step)
 --| carefully find the main content, then add this code
 --| <div class="card-container-1">
 <div id="insert-hello"></div>

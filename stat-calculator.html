@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0038)https://coryn.club/stat_calculator.php -->
 <html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="index_files/all.min.css">
 	<title>Coryn Club - Toram Online Database &amp; Tools</title>
 	<link rel="shortcut icon" type="image/x-icon" href="https://coryn.club/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
@@ -403,7 +404,16 @@
 	<!-- content -->
 	<div id="content" class="animated fast fadeInUp">
 		<p class="content-title text-center">Stat Calculator <i><small>(Ver. 4.7)</small></i></p>
-
+<div class="card-container-1">
+<div id="insert-hello"></div>
+				<script>
+  fetch('VersionChanges.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('insert-hello').innerHTML = data;
+    });
+</script>
+</div>
 				<div class="container mt-15 mb-15" style="border:solid 1px black; padding:5px;">
 			<i><center>You need to login to use Save/Load feature.</center></i>
 		</div>

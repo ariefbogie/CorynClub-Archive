@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0038)https://coryn.club/skill_simulator.php -->
 <html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="index_files/all.min.css">
 	<title>Coryn Club - Toram Online Database &amp; Tools</title>
 	<link rel="shortcut icon" type="image/x-icon" href="https://coryn.club/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
@@ -557,7 +558,17 @@
 		</script>
 		</div>
 		</center>
-			<p class="content-title text-center">Toram Skill Simulator <br><i><small>(Ver. 1.1)</small></i></p>
+			<p class="content-title text-center">Toram Skill Simulator <br><i><small>(Ver. 1.1)<div class="card-container-1">
+<div id="insert-hello"></div>
+				<script>
+  fetch('VersionChanges.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('insert-hello').innerHTML = data;
+    });
+</script>
+</div>
+</small></i></p>
 
 		<!-- ---- SAVE/LOAD ---- -->
 				<div class="container mt-15 mb-15" style="border:solid 1px black; padding:5px;">
