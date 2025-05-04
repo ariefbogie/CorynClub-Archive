@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0051)https://coryn.club/registlet.php?&show=999999999999 -->
 <html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="index_files/all.min.css">
 	<title>Coryn Club - Toram Online Database &amp; Tools</title>
 	<link rel="shortcut icon" type="image/x-icon" href="https://coryn.club/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
@@ -361,6 +362,16 @@
 
 	<!-- content -->
 	<div id="content" class="animated fadeInUp fast">
+	<div class="card-container-1">
+<div id="insert-hello"></div>
+				<script>
+  fetch('VersionChanges.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('insert-hello').innerHTML = data;
+    });
+</script>
+</div>
 		<p class="content-title">Registlet</p>
 		 
 		<div class="card-container">
